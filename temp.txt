@@ -1,0 +1,13 @@
+
+services:
+  ubuntu:
+    image: ubuntu:22.04   # 好きなバージョンを指定可能
+    container_name: my_ubuntu
+    tty: true             # 対話シェルで使えるようにする
+    volumes:
+      - ./dotfiles:/dotfiles   # ローカルの ./workspace をコンテナ内にバインド
+    working_dir: /dotfiles      # 作業ディレクトリを設定
+
+
+
+
