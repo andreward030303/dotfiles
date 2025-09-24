@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/root/.local/share/nvim/mason/bin'
+let g:netrw_dirhist_5='/app/dotfiles/nvim/lua/plugins'
+let g:netrw_dirhist_4='/app/dotfiles/nvim/lua'
+let g:netrw_dirhist_3='/app/dotfiles/nvim'
+let g:netrw_dirhist_2='/root/.config/nvim'
+let g:netrw_dirhist_1='/root/.config'

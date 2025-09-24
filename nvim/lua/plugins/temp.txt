@@ -1,0 +1,179 @@
+
+vim.diagnostic.config({
+  virtual_text = { prefix = "▲" }, -- 行内に「▲」付きで表示
+  signs = true,                    -- 行番号左にアイコン
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
+-- ======================================
+-- lazy.nvim bootstrap
+-- ======================================
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+
+  -- ========================
+  -- LSP / 開発支援
+  -- ========================
+  { "neovim/nvim-lspconfig" },
+
+  {
+    "williamboman/mason.nvim",
+    build = ":MasonUpdate",
+    config = function()
+      require("mason").setup()
+    end,
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "intelephense" },
+        handlers = {
+          function(server)
+            vim.lsp.config.intelephense.setup({
+              capabilities = require("cmp_nvim_lsp").default_capabilities(),
+              settings = {
+                intelephense = {
+                  diagnostics = {
+                    enable = true, -- 👈 intele の診断を有効にする
+                  },
+                },
+              },
+            })
+          end,
+        },
+      })
+    end,
+  },
+
+  -- null-ls (フォーマッタだけ利用)
+  {
+    "nvimtools/none-ls.nvim",
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.phpcsfixer, -- 保存時フォーマット
+        },
+      })
+    end,
+  },
+
+  -- Mason Tool Installer (外部ツール自動インストール)
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    config = function()
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          "intelephense",  -- PHP LSP
+          "php-cs-fixer",  -- フォーマッタ
+        },
+        auto_update = true,
+        run_on_start = true,
+      })
+    end,
+  },
+
+  -- ========================
+  -- 補完エンジン
+  -- ========================
+  { "hrsh7th/nvim-cmp" },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "L3MON4D3/LuaSnip" },
+  { "hrsh7th/cmp-buffer" },
+  { "hrsh7th/cmp-path" },
+
+-- -- LSP
+-- { "neovim/nvim-lspconfig" },
+-- { "williamboman/mason.nvim" },
+-- { "williamboman/mason-lspconfig.nvim" },
+
+-- -- 補完エンジン
+
+-- -- スニペット
+-- { "L3MON4D3/LuaSnip" },
+-- { "saadparwaiz1/cmp_luasnip" },
+
+
+
+
+--   -- ========================
+--   -- Treesitter
+--   -- ========================
+--   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+
+--   -- ========================
+--   -- Laravel / PHP 補助
+--   -- ========================
+--   { "noahfrederick/vim-laravel", ft = "php" },
+--   { "jwalton512/vim-blade", ft = "blade" },
+--   { "stephpy/vim-php-cs-fixer", ft = "php" },
+
+--   -- ========================
+--   -- Git 連携
+--   -- ========================
+--   { "lewis6991/gitsigns.nvim" },
+
+--   -- ========================
+--   -- UI
+--   -- ========================
+--   { "nvim-lualine/lualine.nvim" },
+--   { "nvim-tree/nvim-tree.lua" },
+--   { "folke/tokyonight.nvim" },
+--   { "ellisonleao/gruvbox.nvim" },
+
+--   -- ========================
+--   -- Fuzzy Finder
+--   -- ========================
+--   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+})
+
+
+
+
+
+
+
+
+
+
+
+  -- ========================
+  -- Laravel / PHP 補助
+  -- ========================
+  { "noahfrederick/vim-laravel", ft = "php" },
+  { "jwalton512/vim-blade", ft = "blade" },
+  { "stephpy/vim-php-cs-fixer", ft = "php" },
+
+  -- ========================
+  -- Git 連携
+  -- ========================
+  { "lewis6991/gitsigns.nvim" },
+
+  -- ========================
+  -- UI
+  -- ========================
+  { "nvim-lualine/lualine.nvim" },
+  { "nvim-tree/nvim-tree.lua" },
+  { "folke/tokyonight.nvim" },
+  { "ellisonleao/gruvbox.nvim" },
+
+  -- ========================
+  -- Fuzzy Finder
+  -- ========================
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
