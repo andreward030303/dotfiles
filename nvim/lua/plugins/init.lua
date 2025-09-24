@@ -21,12 +21,11 @@ require("lazy").setup({
   -- ========================
   { "github/copilot.vim" }, -- Copilot プラグイン
   { "neovim/nvim-lspconfig" },
-  { "williamboman/mason.nvim", build = ":MasonUpdate" },
+  { "williamboman/mason.nvim" },
   { "williamboman/mason-lspconfig.nvim" },
   { "nvimtools/none-ls.nvim" },
   { "WhoIsSethDaniel/mason-tool-installer.nvim" },
   { "nvim-lua/plenary.nvim" },
-
 
   -- ========================
   -- 補完エンジン
@@ -43,7 +42,15 @@ require("lazy").setup({
   { "windwp/nvim-autopairs" },      -- 括弧自動補完
 
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
-
   { "nvimdev/lspsaga.nvim", event = "LspAttach", config = true },
 
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("core.treesitter")  -- ← 設定を外部ファイルで管理
+    end,
+  },
+  -- { "projekt0n/github-nvim-theme" }
+  { "tanvirtin/monokai.nvim" }
 })

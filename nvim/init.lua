@@ -5,13 +5,7 @@
 
 require("core.options")
 require("core.keymaps")
-
--- require("core.colorscheme")
-
--- diagnostic 設定
 require("core.diagnostics")
-
--- lazy.nvim プラグイン読み込み
 require("plugins")
 
 require("core.cmp")   -- 補完の設定を読み込む
@@ -24,3 +18,4 @@ require("lsp.php")
 
 require("core.lspsaga")
 
+require("core.colorscheme")

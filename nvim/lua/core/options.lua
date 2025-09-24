@@ -18,3 +18,7 @@ opt.swapfile = false
 opt.hlsearch = false
 
 vim.o.updatetime = 500  -- 0.5秒くらいが VSCode っぽい
+
+opt.mouse = ""
+
+vim.opt.termguicolors = true

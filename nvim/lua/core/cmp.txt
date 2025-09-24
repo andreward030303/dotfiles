@@ -1,4 +1,65 @@
 
+
+
+
+ export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+apt install ripgrep
+
+
+
+curl -LO https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz
+tar xzf nvim-linux-x86_64.tar.gz
+mv nvim-linux-x86_64 /usr/local/nvim
+ln -s /usr/local/nvim/bin/nvim /usr/local/bin/nvim
+
+
+
+
+apt update && apt install -y ninja-build gettext cmake unzip curl build-essential git
+
+git clone https://github.com/neovim/neovim.git
+cd neovim; git checkout v0.11.4; make CMAKE_BUILD_TYPE=Release; make install
+
+
+
+# 必要パッケージ
+sudo apt update
+sudo apt install -y git build-essential automake bison pkg-config \
+  libevent-dev libncurses5-dev libncursesw5-dev
+
+# tmux ソース取得
+git clone https://github.com/tmux/tmux.git
+cd tmux
+git checkout 3.5a
+
+# ビルド & インストール
+sh autogen.sh
+./configure
+make
+sudo make install
+
+# 確認
+tmux -V
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- lua/core/cmp.lua
 local cmp = require("cmp")
 local luasnip = require("luasnip")

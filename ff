@@ -1,0 +1,7 @@
+
+  Failed (1)
+    ● mason.nvim 0.07ms ✔ build
+        ...hare/nvim/lazy/lazy.nvim/lua/lazy/manage/task/plugin.lua:25: Error while parsing command line: E492: Not an editor command: MasonUpdate
+
+ 
+
