@@ -9,9 +9,20 @@ apt install -y \
 # ======================
 # ロケール設定 (ja_JP.UTF-8)
 # ======================
-if ! locale -a | grep -q "ja_JP.utf8"; then
-  locale-gen ja_JP.UTF-8
+. /etc/os-release
+
+if [ "$ID" = "ubuntu" ]; then
+  # Ubuntu 系
+  apt-get update
+  apt-get install -y language-pack-ja
+elif [ "$ID" = "debian" ]; then
+  # Debian 系
+  apt-get update
+  apt-get install -y locales
+  sed -i '/ja_JP.UTF-8/s/^# //g' /etc/locale.gen
+  locale-gen
 fi
+
 update-locale LANG=ja_JP.UTF-8 LC_ALL=ja_JP.UTF-8
 
 # .bashrc に LANG/LC_ALL を追加して永続化
