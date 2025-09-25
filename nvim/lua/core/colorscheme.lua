@@ -1,6 +1,5 @@
 -- colorscheme があれば読み込む
 vim.cmd("syntax on")
-vim.opt.background = "dark"
 
 -- lazy.nvim で colorscheme プラグインを入れてるならここで設定
 -- require("github-theme").setup({
@@ -18,4 +17,11 @@ vim.opt.background = "dark"
 
 -- カラースキームを有効化
 -- vim.cmd.colorscheme("github_dark")
-vim.cmd.colorscheme("monokai")
+-- vim.cmd.colorscheme("monokai")
+
+require("tokyonight").setup({
+  style = "moon", -- "storm", "moon", "night", "day"
+  transparent = true,
+})
+vim.cmd("colorscheme tokyonight")
+

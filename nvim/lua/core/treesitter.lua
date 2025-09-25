@@ -21,9 +21,9 @@ require("nvim-treesitter.configs").setup({
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "<CR>",        -- カーソル位置から選択開始
-      node_incremental = "<CR>",      -- <CR> で選択範囲を広げる
-      node_decremental = "<BS>",      -- <BS> で選択範囲を縮める
+      init_selection = "dn",        -- カーソル位置から選択開始
+      node_incremental = "n",      -- <CR> で選択範囲を広げる
+      node_decremental = "b",      -- <BS> で選択範囲を縮める
     },
   },
 

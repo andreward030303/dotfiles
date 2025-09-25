@@ -3,8 +3,8 @@
 -- require("user.core.autocmds")
 -- require("plugins")    -- lazy.nvim のセットアップ
 
-require("core.options")
 require("core.keymaps")
+require("core.options")
 require("core.diagnostics")
 require("plugins")
 

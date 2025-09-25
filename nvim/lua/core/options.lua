@@ -5,6 +5,8 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.autoindent = true
+vim.opt.number = true
+vim.opt.hlsearch = true
 
 -- 表示
 opt.background = "dark"
@@ -22,3 +24,6 @@ vim.o.updatetime = 500  -- 0.5秒くらいが VSCode っぽい
 opt.mouse = ""
 
 vim.opt.termguicolors = true
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
+
