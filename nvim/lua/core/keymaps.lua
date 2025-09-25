@@ -21,6 +21,8 @@ map("n", "cl", "V", { desc = "" })
 map("n", "gi", "I", { desc = "" })
 map("n", "ga", "A", { desc = "" })
 
+vim.keymap.set("v", "gy", ":w! /app/copy.txt<CR>", { desc = "" })
+
 -- === netrw 用キーマップ ===
 local grp = vim.api.nvim_create_augroup("MyNetrwMaps", { clear = true })
 
