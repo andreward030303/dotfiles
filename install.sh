@@ -3,8 +3,13 @@
 # 必要なパッケージのインストール
 apt update
 apt install -y \
-  wget curl ninja-build gettext cmake unzip build-essential git ripgrep \
+  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find \
   locales
+
+# fd を fd として使えるようにリンク（fdfind → fd）
+if [ ! -e /usr/local/bin/fd ]; then
+  ln -s "$(command -v fdfind)" /usr/local/bin/fd
+fi
 
 # ======================
 # ロケール設定 (ja_JP.UTF-8)
@@ -106,6 +111,8 @@ fi
 
 if ! grep -q "alias v=" "$HOME/.bashrc"; then
   echo "alias v='nvim .'" >> "$HOME/.bashrc"
+  echo "alias t='tmux -2 a'" >> "$HOME/.bashrc"
+  echo "alias nt='tmux -2'" >> "$HOME/.bashrc"
 fi
 
 # ======================

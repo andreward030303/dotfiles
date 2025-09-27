@@ -14,13 +14,6 @@ M.on_attach = function(_, bufnr)
   end, { noremap = true, silent = true, desc = "Find References" })
 
   vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts)
-
-  vim.api.nvim_create_autocmd("CursorHold", {
-    buffer = bufnr,
-    callback = function()
-      vim.lsp.buf.hover()
-    end,
-  })
 end
 
 M.capabilities = require("cmp_nvim_lsp").default_capabilities()

@@ -1,17 +1,96 @@
 -- lua/core/telescope.lua
 local telescope = require("telescope")
+local previewers = require("telescope.previewers")
+
+-- 大きいファイルのプレビューを抑止（> 200KB）
+local function large_file_safe_previewer(filepath, bufnr, opts)
+  filepath = vim.fn.expand(filepath)
+  local ok, stat = pcall(vim.loop.fs_stat, filepath)
+  if ok and stat and stat.size and stat.size > 200 * 1024 then
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(bufnr) then
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "Preview disabled (file > 200KB)" })
+      end
+    end)
+    return
+  end
+  return previewers.buffer_previewer_maker(filepath, bufnr, opts)
+end
+
+-- fd があれば優先、無ければ rg --files
+local find_cmd
+if vim.fn.executable("fd") == 1 then
+  find_cmd = {
+    "fd", "--type", "f", "--strip-cwd-prefix", "--hidden", "--follow",
+    "--exclude", ".git",
+    "--exclude", "node_modules",
+    "--exclude", "vendor",
+    "--exclude", "storage",
+    "--exclude", "dist",
+    "--exclude", "build",
+    "--exclude", ".cache",
+    "--exclude", "coverage",
+    "--exclude", "tmp",
+  }
+else
+  find_cmd = {
+    "rg", "--files", "--hidden", "--follow",
+    "--glob", "!.git/*",
+    "--glob", "!node_modules/*",
+    "--glob", "!vendor/*",
+    "--glob", "!storage/*",
+    "--glob", "!dist/*",
+    "--glob", "!build/*",
+    "--glob", "!.cache/*",
+    "--glob", "!coverage/*",
+    "--glob", "!tmp/*",
+  }
+end
 
 telescope.setup({
   defaults = {
+    buffer_previewer_maker = large_file_safe_previewer,
+    -- live_grep 用 rg の標準引数（隠しファイルも対象、重いフォルダは除外）
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+      "--hidden",
+      "--follow",
+      "--glob", "!.git/*",
+      "--glob", "!node_modules/*",
+      "--glob", "!vendor/*",
+      "--glob", "!storage/*",
+      "--glob", "!dist/*",
+      "--glob", "!build/*",
+      "--glob", "!.cache/*",
+      "--glob", "!coverage/*",
+      "--glob", "!tmp/*",
+    },
     file_ignore_patterns = {
+      "%.git/",
+      "node_modules/",
       "vendor/",
       "storage/",
-      "node_modules/",
+      "dist/",
+      "build/",
       "target/",
-      "bin/",
-      "%.git/",
       "%.cache/",
+      "coverage/",
+      "tmp/",
     },
+    path_display = { "truncate" },
+    color_devicons = false,
+    preview = { treesitter = false, timeout = 150 },
+    sorting_strategy = "ascending",
+    layout_config = { prompt_position = "top", horizontal = { preview_width = 0.55 } },
+  },
+  pickers = {
+    find_files = { find_command = find_cmd },
   },
 })
 
