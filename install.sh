@@ -6,6 +6,27 @@ apt install -y \
   wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find \
   locales
 
+# ======================
+# 最新版 fd & ripgrep インストール
+# ======================
+FD_VERSION=9.0.0
+RG_VERSION=14.1.0
+
+echo "🚀 Installing fd ${FD_VERSION}..."
+curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
+  | tar xz
+cp -f "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu/fd" /usr/local/bin/
+rm -rf "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu"
+
+echo "🚀 Installing ripgrep ${RG_VERSION}..."
+curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+  | tar xz
+cp -f "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg" /usr/local/bin/
+rm -rf "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl"
+
+fd --version
+rg --version
+
 # fd を fd として使えるようにリンク（fdfind → fd）
 if [ ! -e /usr/local/bin/fd ]; then
   ln -s "$(command -v fdfind)" /usr/local/bin/fd
@@ -140,5 +161,4 @@ mkdir -p ~/.config
 ln -sfn "/home/dotfiles/nvim" ~/.config/nvim
 
 echo "✅ Setup complete. Run 'source ~/.bashrc' to apply changes."
-
 
