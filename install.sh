@@ -116,10 +116,29 @@ if ! grep -q "alias v=" "$HOME/.bashrc"; then
 fi
 
 # ======================
+# Stylua (Rust/Cargo ビルド)
+# ======================
+if ! command -v stylua >/dev/null 2>&1; then
+  echo "🚀 Installing Stylua from source..."
+  # Rust がなければインストール
+  if ! command -v cargo >/dev/null 2>&1; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    export PATH="$HOME/.cargo/bin:$PATH"
+    if ! grep -q ".cargo/bin" "$HOME/.bashrc"; then
+      echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> "$HOME/.bashrc"
+    fi
+  fi
+  cargo install stylua --locked
+  echo "✅ Stylua installed: $(which stylua)"
+  stylua --version
+fi
+
+# ======================
 # Neovim 設定リンク
 # ======================
 mkdir -p ~/.config
 ln -sfn "/home/dotfiles/nvim" ~/.config/nvim
 
 echo "✅ Setup complete. Run 'source ~/.bashrc' to apply changes."
+
 
