@@ -67,7 +67,7 @@ require("lazy").setup({
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      { "EmranMR/tree-sitter-blade" }, -- ★ Blade用パーサーを追加
+      { "tree-sitter/tree-sitter-html" },
     },
     config = function()
       require("core.treesitter") -- 外部に設定分離
