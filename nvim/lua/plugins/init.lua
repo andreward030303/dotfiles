@@ -149,8 +149,8 @@ require("lazy").setup({
     vim.keymap.set("x", "gg", function()
       align.operator({ split_pattern = "=", justify_side = "right" })
     end, { noremap = true, silent = true })
-  end,-
-}
+  end,
+},
 
 
 })
