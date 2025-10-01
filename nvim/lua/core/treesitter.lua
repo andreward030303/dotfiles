@@ -17,6 +17,13 @@ require("nvim-treesitter.configs").setup({
   highlight = { enable = true }, -- 構文ハイライト
   indent = { enable = true },    -- インデント補助
 
+  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+      pattern = "*.blade.php",
+      callback = function()
+          vim.bo.filetype = "html"
+      end,
+  }),
+
   -- 増分選択（コードブロックを拡張して選択できる）
   incremental_selection = {
     enable = true,
