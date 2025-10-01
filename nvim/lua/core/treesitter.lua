@@ -22,8 +22,7 @@ require("nvim-treesitter.configs").setup({
     callback = function()
       vim.bo.filetype = "html"
     end,
-  })
-
+  }),
 
   -- 増分選択（コードブロックを拡張して選択できる）
   incremental_selection = {
