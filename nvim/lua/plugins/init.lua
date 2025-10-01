@@ -66,6 +66,9 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      { "EmranMR/tree-sitter-blade" }, -- ★ Blade用パーサーを追加
+    },
     config = function()
       require("core.treesitter") -- 外部に設定分離
     end,
