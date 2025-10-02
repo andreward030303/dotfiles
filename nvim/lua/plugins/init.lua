@@ -136,23 +136,11 @@ require("lazy").setup({
         })
     end,
   },
-
-  {
-    "echasnovski/mini.align",
-    version = false,
-    config = function()
-    local align = require("mini.align")
-
-    align.setup() -- デフォルト設定も残す
-
-    -- Visual モードで `gg` 押したら "=" で揃える
-    vim.keymap.set("x", "gg", function()
-      align.operator({ split_pattern = "=", justify_side = "right" })
-    end, { noremap = true, silent = true })
-  end,
-},
-
-
+   {
+     "echasnovski/mini.align",
+     version = false,
+     config = function()
+       require("mini.align").setup() -- デフォルト設定を有効化
+     end,
+   },
 })
-
-
