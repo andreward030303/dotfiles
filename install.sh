@@ -155,6 +155,16 @@ if ! command -v stylua >/dev/null 2>&1; then
 fi
 
 # ======================
+# Prettier (npm 経由)
+# ======================
+if ! command -v prettier >/dev/null 2>&1; then
+  echo "🚀 Installing Prettier (via npm)..."
+  npm install -g prettier
+  echo "✅ Prettier installed: $(which prettier)"
+  prettier --version
+fi
+
+# ======================
 # Neovim 設定リンク
 # ======================
 mkdir -p ~/.config

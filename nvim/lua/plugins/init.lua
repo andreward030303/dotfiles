@@ -123,6 +123,7 @@ require("lazy").setup({
                 php = { "php_cs_fixer" }, -- PHP用フォーマッタ
                 javascript = { "prettier" },
                 typescript = { "prettier" },
+                html = { "prettier" },
                 lua = { "stylua" },
                 -- 他の言語も追加できる
             },
