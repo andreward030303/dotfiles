@@ -1,6 +1,7 @@
 -- lua/core/telescope.lua
 local telescope = require("telescope")
 local previewers = require("telescope.previewers")
+local actions = require("telescope.actions")
 
 -- 大きいファイルのプレビューを抑止（> 200KB）
 local function large_file_safe_previewer(filepath, bufnr, opts)
@@ -88,6 +89,19 @@ telescope.setup({
     preview = { treesitter = false, timeout = 150 },
     sorting_strategy = "ascending",
     layout_config = { prompt_position = "top", horizontal = { preview_width = 0.55 } },
+    -- ここでカスタムキーマップ: Enter で下へ移動 / Tab で開く / Shift-Tab でマルチ選択トグル
+    mappings = {
+      i = {
+        ["<CR>"] = actions.move_selection_next,
+        ["<Tab>"] = actions.select_default,
+        ["<S-Tab>"] = actions.toggle_selection,
+      },
+      n = {
+        ["<CR>"] = actions.move_selection_next,
+        ["<Tab>"] = actions.select_default,
+        ["<S-Tab>"] = actions.toggle_selection,
+      },
+    },
   },
   pickers = {
     find_files = { find_command = find_cmd },
