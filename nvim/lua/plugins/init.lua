@@ -144,4 +144,102 @@ require("lazy").setup({
        require("mini.align").setup() -- デフォルト設定を有効化
      end,
    },
+
+ -- ========================
+  -- ▼ 追加：Next.js / React / Tailwind / DX用プラグイン
+  -- ========================
+
+  -- JSX タグ自動補完
+  {
+    "windwp/nvim-ts-autotag",
+    event = "InsertEnter",
+    config = function()
+      require("nvim-ts-autotag").setup()
+    end,
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
+
+  -- TypeScript 拡張 (import整理, ファイルリネーム等)
+  {
+    "jose-elias-alvarez/typescript.nvim",
+    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    config = function()
+      require("typescript").setup({
+        server = {
+          on_attach = function(client, bufnr)
+            local ts = require("typescript")
+            vim.keymap.set("n", "<leader>oi", ts.actions.organizeImports, { buffer = bufnr })
+            vim.keymap.set("n", "<leader>rf", ts.actions.renameFile, { buffer = bufnr })
+          end,
+        },
+      })
+    end,
+  },
+
+  -- ESLint / Prettier / Lint 統合 (none-ls)
+  {
+    "nvimtools/none-ls.nvim",
+    event = "BufReadPre",
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.prettier,
+          null_ls.builtins.diagnostics.eslint_d,
+          null_ls.builtins.code_actions.eslint_d,
+        },
+      })
+    end,
+  },
+
+  -- Mason連携で自動インストール
+  {
+    "jay-babu/mason-null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      require("mason-null-ls").setup({
+        ensure_installed = { "prettier", "eslint_d", "stylelint" },
+        automatic_installation = true,
+      })
+    end,
+  },
+
+  -- TailwindCSS の色プレビュー & クラス補助
+  {
+    "luckasRanarison/tailwind-tools.nvim",
+    ft = { "typescriptreact", "javascriptreact", "html" },
+    config = function()
+      require("tailwind-tools").setup({
+        document_color = { enabled = true },
+        conceal = true,
+      })
+    end,
+  },
+
+  -- 色プレビュー (styled-components / CSSなど)
+  {
+    "NvChad/nvim-colorizer.lua",
+    event = "BufReadPre",
+    config = function()
+      require("colorizer").setup()
+    end,
+  },
+
+  -- which-key でショートカットガイド
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("which-key").add({
+        { "<leader>o", group = "organize" },
+        { "<leader>oi", "<cmd>TypescriptOrganizeImports<CR>", desc = "Organize imports" },
+        { "<leader>rf", "<cmd>TypescriptRenameFile<CR>", desc = "Rename file" },
+      })
+    end,
+  },
+
+
+
+
+
 })

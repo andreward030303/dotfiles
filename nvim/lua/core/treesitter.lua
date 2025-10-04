@@ -12,6 +12,7 @@ require("nvim-treesitter.configs").setup({
     "yaml",
     "html",
     "css",
+    "tsx",
   },
 
   highlight = { enable = true }, -- 構文ハイライト
