@@ -3,7 +3,7 @@
 # 必要なパッケージのインストール
 apt update
 apt install -y \
-  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find \
+  wget curl ninja-build gettext cmake unzip build-essential git \
   locales
 
 # ======================
@@ -11,18 +11,37 @@ apt install -y \
 # ======================
 FD_VERSION=9.0.0
 RG_VERSION=14.1.0
+ARCH=$(uname -m)
 
-echo "🚀 Installing fd ${FD_VERSION}..."
-curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
-  | tar xz
-cp -f "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu/fd" /usr/local/bin/
-rm -rf "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu"
+# Alpine 判定（musl libcかどうか）
+if ldd --version 2>&1 | grep -qi musl; then
+  LIBC="musl"
+else
+  LIBC="gnu"
+fi
 
-echo "🚀 Installing ripgrep ${RG_VERSION}..."
-curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+if [ "$ARCH" = "x86_64" ]; then
+  FD_ARCH="x86_64-unknown-linux-${LIBC}"
+  RG_ARCH="x86_64-unknown-linux-${LIBC}"
+elif [ "$ARCH" = "aarch64" ]; then
+  FD_ARCH="aarch64-unknown-linux-${LIBC}"
+  RG_ARCH="aarch64-unknown-linux-${LIBC}"
+else
+  echo "Unsupported architecture: $ARCH"
+  exit 1
+fi
+
+echo "🚀 Installing fd ${FD_VERSION} for ${FD_ARCH}..."
+curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-${FD_ARCH}.tar.gz" \
   | tar xz
-cp -f "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg" /usr/local/bin/
-rm -rf "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl"
+cp -f "fd-v${FD_VERSION}-${FD_ARCH}/fd" /usr/local/bin/
+rm -rf "fd-v${FD_VERSION}-${FD_ARCH}"
+
+echo "🚀 Installing ripgrep ${RG_VERSION} for ${RG_ARCH}..."
+curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-${RG_ARCH}.tar.gz" \
+  | tar xz
+cp -f "ripgrep-${RG_VERSION}-${RG_ARCH}/rg" /usr/local/bin/
+rm -rf "ripgrep-${RG_VERSION}-${RG_ARCH}"
 
 fd --version
 rg --version
