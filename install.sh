@@ -1,36 +1,15 @@
 #!/bin/bash
+set -euo pipefail
+trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
+
+export DEBIAN_FRONTEND=noninteractive
+ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # 必要なパッケージのインストール
 apt update
 apt install -y \
-  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find neovim tmux\
+  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find tmux\
   locales
-
-# ======================
-# 最新版 fd & ripgrep インストール
-# ======================
-FD_VERSION=9.0.0
-RG_VERSION=14.1.0
-
-echo "🚀 Installing fd ${FD_VERSION}..."
-curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
-  | tar xz
-cp -f "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu/fd" /usr/local/bin/
-rm -rf "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu"
-
-echo "🚀 Installing ripgrep ${RG_VERSION}..."
-curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-  | tar xz
-cp -f "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg" /usr/local/bin/
-rm -rf "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl"
-
-fd --version
-rg --version
-
-# fd を fd として使えるようにリンク（fdfind → fd）
-if [ ! -e /usr/local/bin/fd ]; then
-  ln -s "$(command -v fdfind)" /usr/local/bin/fd
-fi
 
 # ======================
 # ロケール設定 (ja_JP.UTF-8)
@@ -81,6 +60,21 @@ export NVM_DIR="$HOME/.nvm"
 EOF
   fi
 fi
+
+# ======================
+# Neovim ビルド
+# ======================
+cd ~
+if [ ! -d "neovim" ]; then
+  git clone https://github.com/neovim/neovim.git
+fi
+
+cd neovim
+git fetch --all
+git checkout v0.11.4
+make CMAKE_BUILD_TYPE=Release
+make install
+cd ~
 
 # ======================
 # Neovim 関連 PATH / alias
