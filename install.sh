@@ -3,7 +3,7 @@
 # 必要なパッケージのインストール
 apt update
 apt install -y \
-  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find \
+  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find neovim tmux\
   locales
 
 # ======================
@@ -37,17 +37,9 @@ fi
 # ======================
 . /etc/os-release
 
-if [ "$ID" = "ubuntu" ]; then
-  # Ubuntu 系
-  apt-get update
-  apt-get install -y language-pack-ja
-elif [ "$ID" = "debian" ]; then
-  # Debian 系
-  apt-get update
-  apt-get install -y locales
-  sed -i '/ja_JP.UTF-8/s/^# //g' /etc/locale.gen
-  locale-gen
-fi
+# Ubuntu 系
+apt-get update
+apt-get install -y language-pack-ja
 
 update-locale LANG=ja_JP.UTF-8 LC_ALL=ja_JP.UTF-8
 
@@ -89,39 +81,6 @@ export NVM_DIR="$HOME/.nvm"
 EOF
   fi
 fi
-
-# ======================
-# Neovim ビルド
-# ======================
-cd ~
-if [ ! -d "neovim" ]; then
-  git clone https://github.com/neovim/neovim.git
-fi
-
-cd neovim
-git fetch --all
-git checkout v0.11.4
-make CMAKE_BUILD_TYPE=Release
-make install
-cd ~
-
-# ======================
-# tmux ビルド
-# ======================
-apt install -y git build-essential automake bison pkg-config \
-  libevent-dev libncurses5-dev libncursesw5-dev
-
-if [ ! -d "tmux" ]; then
-  git clone https://github.com/tmux/tmux.git
-fi
-cd tmux
-git fetch --all
-git checkout 3.5a
-sh autogen.sh
-./configure
-make
-make install
-cd ~
 
 # ======================
 # Neovim 関連 PATH / alias
