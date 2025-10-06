@@ -1,49 +1,144 @@
 #!/bin/bash
-
-# 必要なパッケージのインストール
-apt update
-apt install -y \
-  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find \
-  locales
+set -euo pipefail
+trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
 
 # ======================
-# 最新版 fd & ripgrep インストール
+# 環境情報取得
+# ======================
+. /etc/os-release
+
+ARCH=$(uname -m)
+LIBC="gnu"
+if ldd --version 2>&1 | grep -qi musl; then
+  LIBC="musl"
+fi
+
+echo "🧱 Detected architecture: $ARCH (libc: $LIBC, distro: $ID)"
+
+# ======================
+# 基本パッケージ
+# ======================
+apt update
+apt install -y wget curl gettext unzip locales software-properties-common
+
+# ======================
+# 最新 cmake / ninja / git / gcc セットアップ
+# ======================
+
+# --- CMake ---
+CMAKE_VERSION="3.29.6"
+if command -v cmake >/dev/null 2>&1; then
+  CUR_CMAKE=$(cmake --version | head -n1 | awk '{print $3}')
+  echo "ℹ️ Found CMake $CUR_CMAKE"
+else
+  CUR_CMAKE="0.0.0"
+fi
+
+if [ "$(printf '%s\n' "$CUR_CMAKE" "3.16.0" | sort -V | head -n1)" = "$CUR_CMAKE" ]; then
+  echo "🚀 Installing CMake ${CMAKE_VERSION}..."
+  if [ "$ARCH" = "x86_64" ]; then
+    CMAKE_FILE="cmake-${CMAKE_VERSION}-linux-x86_64.sh"
+  elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    CMAKE_FILE="cmake-${CMAKE_VERSION}-linux-aarch64.sh"
+  else
+    echo "❌ Unsupported architecture for CMake: $ARCH"
+    exit 1
+  fi
+  curl -LO "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_FILE}"
+  sh "$CMAKE_FILE" --skip-license --prefix=/usr/local
+  rm -f "$CMAKE_FILE"
+  cmake --version
+fi
+
+# --- Ninja ---
+NINJA_VERSION="1.12.1"
+if ! command -v ninja >/dev/null 2>&1 || [ "$(ninja --version 2>/dev/null || echo 0)" \< "1.10" ]; then
+  echo "🚀 Installing Ninja ${NINJA_VERSION}..."
+  if [ "$ARCH" = "x86_64" ]; then
+    NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v${NINJA_VERSION}/ninja-linux.zip"
+    curl -LO "$NINJA_URL"
+    unzip ninja-linux*.zip
+    mv ninja /usr/local/bin/
+    chmod +x /usr/local/bin/ninja
+    rm -f ninja-linux*.zip
+  elif [ "$ARCH" = "aarch64" ]; then
+    echo "⚠️ No prebuilt Ninja for aarch64 — building from source..."
+    git clone https://github.com/ninja-build/ninja.git
+    cd ninja && cmake -Bbuild-cmake && cmake --build build-cmake
+    cp build-cmake/ninja /usr/local/bin/
+    cd .. && rm -rf ninja
+  else
+    echo "❌ Unsupported architecture for Ninja: $ARCH"
+    exit 1
+  fi
+  ninja --version
+fi
+
+# --- Git ---
+echo "🚀 Ensuring latest Git..."
+if [ "$ID" = "ubuntu" ]; then
+  apt install -y software-properties-common
+  add-apt-repository ppa:git-core/ppa -y
+  apt update -y && apt install -y git
+elif [ "$ID" = "debian" ]; then
+  echo "⚠️ DebianではPPAは無効。公式レポジトリのgitを使用。"
+  apt install -y git
+else
+  echo "⚠️ Git installation skipped for unsupported distro ($ID)"
+fi
+git --version
+
+# --- GCC / build-essential ---
+echo "🚀 Ensuring modern GCC (>=10)..."
+apt install -y build-essential
+if gcc --version | grep -q ' 8\.'; then
+  echo "⚠️ GCC is old. Trying to upgrade..."
+  if [ "$ID" = "debian" ]; then
+    apt -t buster-backports install -y gcc-10 g++-10 || true
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 || true
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100 || true
+  fi
+fi
+gcc --version
+
+# ======================
+# fd & ripgrep
 # ======================
 FD_VERSION=9.0.0
 RG_VERSION=14.1.0
 
-echo "🚀 Installing fd ${FD_VERSION}..."
-curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
-  | tar xz
-cp -f "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu/fd" /usr/local/bin/
-rm -rf "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu"
+if [ "$ARCH" = "x86_64" ]; then
+  FD_ARCH="x86_64-unknown-linux-${LIBC}"
+  RG_ARCH="x86_64-unknown-linux-${LIBC}"
+elif [ "$ARCH" = "aarch64" ]; then
+  FD_ARCH="aarch64-unknown-linux-${LIBC}"
+  RG_ARCH="aarch64-unknown-linux-${LIBC}"
+else
+  echo "Unsupported architecture: $ARCH"
+  exit 1
+fi
 
-echo "🚀 Installing ripgrep ${RG_VERSION}..."
-curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+echo "🚀 Installing fd ${FD_VERSION} for ${FD_ARCH}..."
+curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-${FD_ARCH}.tar.gz" \
   | tar xz
-cp -f "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg" /usr/local/bin/
-rm -rf "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl"
+cp -f "fd-v${FD_VERSION}-${FD_ARCH}/fd" /usr/local/bin/
+rm -rf "fd-v${FD_VERSION}-${FD_ARCH}"
+
+echo "🚀 Installing ripgrep ${RG_VERSION} for ${RG_ARCH}..."
+curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-${RG_ARCH}.tar.gz" \
+  | tar xz
+cp -f "ripgrep-${RG_VERSION}-${RG_ARCH}/rg" /usr/local/bin/
+rm -rf "ripgrep-${RG_VERSION}-${RG_ARCH}"
 
 fd --version
 rg --version
 
-# fd を fd として使えるようにリンク（fdfind → fd）
-if [ ! -e /usr/local/bin/fd ]; then
-  ln -s "$(command -v fdfind)" /usr/local/bin/fd
-fi
-
 # ======================
-# ロケール設定 (ja_JP.UTF-8)
+# ロケール設定
 # ======================
-. /etc/os-release
-
 if [ "$ID" = "ubuntu" ]; then
-  # Ubuntu 系
-  apt-get update
   apt-get install -y language-pack-ja
 elif [ "$ID" = "debian" ]; then
-  # Debian 系
-  apt-get update
   apt-get install -y locales
   sed -i '/ja_JP.UTF-8/s/^# //g' /etc/locale.gen
   locale-gen
@@ -51,7 +146,6 @@ fi
 
 update-locale LANG=ja_JP.UTF-8 LC_ALL=ja_JP.UTF-8
 
-# .bashrc に LANG/LC_ALL を追加して永続化
 if ! grep -q "ja_JP.UTF-8" "$HOME/.bashrc"; then
   cat <<'EOF' >> "$HOME/.bashrc"
 
@@ -62,7 +156,7 @@ EOF
 fi
 
 # ======================
-# Node.js (nvm 経由)
+# Node.js (nvm)
 # ======================
 if ! command -v node >/dev/null 2>&1; then
   echo "🚀 Installing Node.js (latest LTS) via nvm..."
@@ -74,9 +168,7 @@ if ! command -v node >/dev/null 2>&1; then
   fi
 
   . "$NVM_DIR/nvm.sh"
-
   nvm install --lts
-  nvm use --lts
   nvm alias default 'lts/*'
 
   if ! grep -q 'NVM_DIR' "$HOME/.bashrc"; then
@@ -108,8 +200,37 @@ cd ~
 # ======================
 # tmux ビルド
 # ======================
-apt install -y git build-essential automake bison pkg-config \
-  libevent-dev libncurses5-dev libncursesw5-dev
+apt install -y pkg-config libncurses5-dev libncursesw5-dev libevent-dev m4 texinfo autoconf flex
+
+# --- automake ---
+AUTOMAKE_VERSION="1.16.5"
+if ! command -v automake >/dev/null 2>&1 || [[ "$(automake --version | head -n1 | awk '{print $4}')" < "1.16" ]]; then
+  echo "🚀 Installing automake ${AUTOMAKE_VERSION} from GNU..."
+  if [ "$ARCH" = "x86_64" ]; then
+    curl -LO "https://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.gz"
+    tar xf automake-${AUTOMAKE_VERSION}.tar.gz
+    cd automake-${AUTOMAKE_VERSION}
+    ./configure && make && make install
+    cd .. && rm -rf automake-${AUTOMAKE_VERSION}*
+  else
+    echo "⚠️ Skipping automake source build on non-x86_64"
+  fi
+fi
+
+# --- bison ---
+BISON_VERSION="3.8.2"
+if ! command -v bison >/dev/null 2>&1 || [[ "$(bison --version | head -n1 | awk '{print $4}')" < "3.5" ]]; then
+  echo "🚀 Installing bison ${BISON_VERSION} from GNU..."
+  if [ "$ARCH" = "x86_64" ]; then
+    curl -LO "https://ftp.gnu.org/gnu/bison/bison-${BISON_VERSION}.tar.gz"
+    tar xf bison-${BISON_VERSION}.tar.gz
+    cd bison-${BISON_VERSION}
+    ./configure && make && make install
+    cd .. && rm -rf bison-${BISON_VERSION}*
+  else
+    echo "⚠️ Skipping bison source build on non-x86_64"
+  fi
+fi
 
 if [ ! -d "tmux" ]; then
   git clone https://github.com/tmux/tmux.git
@@ -124,7 +245,7 @@ make install
 cd ~
 
 # ======================
-# Neovim 関連 PATH / alias
+# Neovim PATH / alias
 # ======================
 if ! grep -q 'nvim/mason/bin' "$HOME/.bashrc"; then
   echo 'export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"' >> "$HOME/.bashrc"
@@ -137,38 +258,35 @@ if ! grep -q "alias v=" "$HOME/.bashrc"; then
 fi
 
 # ======================
-# Stylua (Rust/Cargo ビルド)
+# Stylua
 # ======================
 if ! command -v stylua >/dev/null 2>&1; then
   echo "🚀 Installing Stylua from source..."
-  # Rust がなければインストール
   if ! command -v cargo >/dev/null 2>&1; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env" || true
     export PATH="$HOME/.cargo/bin:$PATH"
     if ! grep -q ".cargo/bin" "$HOME/.bashrc"; then
       echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> "$HOME/.bashrc"
     fi
   fi
   cargo install stylua --locked
-  echo "✅ Stylua installed: $(which stylua)"
   stylua --version
 fi
 
 # ======================
-# Prettier (npm 経由)
+# Prettier
 # ======================
 if ! command -v prettier >/dev/null 2>&1; then
   echo "🚀 Installing Prettier (via npm)..."
   npm install -g prettier
-  echo "✅ Prettier installed: $(which prettier)"
   prettier --version
 fi
 
 # ======================
 # Neovim 設定リンク
 # ======================
-mkdir -p ~/.config
-ln -sfn "/home/dotfiles/nvim" ~/.config/nvim
+mkdir -p "$HOME/.config"
+ln -sfn "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
 
 echo "✅ Setup complete. Run 'source ~/.bashrc' to apply changes."
-
