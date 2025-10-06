@@ -94,12 +94,22 @@ apt install -y build-essential
 if gcc --version | grep -q ' 8\.'; then
   echo "⚠️ GCC is old. Trying to upgrade..."
   if [ "$ID" = "debian" ]; then
+    if ! grep -q "buster-backports" /etc/apt/sources.list; then
+      echo "⚙️ Adding buster-backports repo..."
+      echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list
+      apt update
+    fi
+
     apt -t buster-backports install -y gcc-10 g++-10 || true
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 || true
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100 || true
+
+    if [ -x /usr/bin/gcc-10 ]; then
+      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 || true
+      update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100 || true
+    else
+      echo "⚠️ gcc-10 not found after installation attempt. Keeping existing GCC."
+    fi
   fi
 fi
-gcc --version
 
 # ======================
 # fd & ripgrep
@@ -125,10 +135,19 @@ cp -f "fd-v${FD_VERSION}-${FD_ARCH}/fd" /usr/local/bin/
 rm -rf "fd-v${FD_VERSION}-${FD_ARCH}"
 
 echo "🚀 Installing ripgrep ${RG_VERSION} for ${RG_ARCH}..."
-curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-${RG_ARCH}.tar.gz" \
-  | tar xz
-cp -f "ripgrep-${RG_VERSION}-${RG_ARCH}/rg" /usr/local/bin/
-rm -rf "ripgrep-${RG_VERSION}-${RG_ARCH}"
+RG_FILE="ripgrep-${RG_VERSION}-${RG_ARCH}.tar.xz"
+RG_URL="https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/${RG_FILE}"
+
+curl -LO "$RG_URL"
+
+if [ -f "$RG_FILE" ]; then
+  tar xf "$RG_FILE"
+  cp -f "ripgrep-${RG_VERSION}-${RG_ARCH}/rg" /usr/local/bin/
+  rm -rf "ripgrep-${RG_VERSION}-${RG_ARCH}" "$RG_FILE"
+else
+  echo "❌ Failed to download ripgrep from $RG_URL"
+  exit 1
+fi
 
 fd --version
 rg --version
