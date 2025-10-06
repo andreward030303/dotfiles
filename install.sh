@@ -1,6 +1,6 @@
 #!/bin/bash
-set -euo pipefail
-trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
+#set -euo pipefail
+#trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
 
 export DEBIAN_FRONTEND=noninteractive
 ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
