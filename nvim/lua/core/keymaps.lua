@@ -21,7 +21,7 @@ map("n", "cl", "V", { desc = "" })
 map("n", "gi", "I", { desc = "" })
 map("n", "ga", "A", { desc = "" })
 
-vim.keymap.set("v", "gy", ":w! /app/copy.txt<CR>", { desc = "" })
+vim.keymap.set("v", "gy", ":w! /code/copy.txt<CR>", { desc = "" })
 vim.keymap.set("v", "gp", "=", { desc = "" })
 
 -- === netrw 用キーマップ ===
