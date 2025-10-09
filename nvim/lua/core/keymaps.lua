@@ -19,7 +19,7 @@ map("n", "cp", "<C-i>", { desc = "Jump forward" })
 vim.keymap.set("n", "cn", "*N", { desc = "Search word under cursor (stay)" })
 map("n", "cl", "V", { desc = "" })
 map("n", "gi", "I", { desc = "" })
-map("n", "ga", "A", { desc = "" })
+map("n", "go", "A", { desc = "" })
 
 vim.keymap.set("v", "gy", ":w! /code/copy.txt<CR>", { desc = "" })
 vim.keymap.set("v", "gp", "=", { desc = "" })
