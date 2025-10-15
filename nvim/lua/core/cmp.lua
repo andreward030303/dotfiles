@@ -18,15 +18,15 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     -- ["<C-Space>"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
-    [" "] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+    -- [" "] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { "i", "s" }),
     -- ["<S-Tab>"] = cmp.mapping(function(fallback)
     --   if cmp.visible() then
     --     cmp.select_prev_item()
