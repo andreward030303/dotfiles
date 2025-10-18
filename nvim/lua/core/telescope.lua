@@ -93,12 +93,12 @@ telescope.setup({
     mappings = {
       i = {
         ["<CR>"] = actions.move_selection_next,
-        ["<Tab>"] = actions.select_default,
+        [" "] = actions.select_default,
         ["<S-Tab>"] = actions.toggle_selection,
       },
       n = {
         ["<CR>"] = actions.move_selection_next,
-        ["<Tab>"] = actions.select_default,
+        [" "] = actions.select_default,
         ["<S-Tab>"] = actions.toggle_selection,
       },
     },
