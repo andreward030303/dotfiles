@@ -114,29 +114,29 @@ require("lazy").setup({
       require("gitsigns").setup()
     end,
   },
-  {
-    "stevearc/conform.nvim",
-    event = { "BufWritePre" }, -- 保存時に自動フォーマットする場合
-    config = function()
-        require("conform").setup({
-            formatters_by_ft = {
-                php = { "php_cs_fixer" }, -- PHP用フォーマッタ
-                javascript = { "prettier" },
-                typescript = { "prettier" },
-                html = { "prettier" },
-                lua = { "stylua" },
-                -- 他の言語も追加できる
-            },
-        })
+  -- {
+  --   "stevearc/conform.nvim",
+  --   event = { "BufWritePre" }, -- 保存時に自動フォーマットする場合
+  --   config = function()
+  --       require("conform").setup({
+  --           formatters_by_ft = {
+  --               php = { "php_cs_fixer" }, -- PHP用フォーマッタ
+  --               javascript = { "prettier" },
+  --               typescript = { "prettier" },
+  --               html = { "prettier" },
+  --               lua = { "stylua" },
+  --               -- 他の言語も追加できる
+  --           },
+  --       })
 
-        -- 保存時に自動フォーマット
-        vim.api.nvim_create_autocmd("BufWritePre", {
-            callback = function(args)
-                require("conform").format({ bufnr = args.buf })
-            end,
-        })
-    end,
-  },
+  --       -- 保存時に自動フォーマット
+  --       vim.api.nvim_create_autocmd("BufWritePre", {
+  --           callback = function(args)
+  --               require("conform").format({ bufnr = args.buf })
+  --           end,
+  --       })
+  --   end,
+  -- },
    {
      "echasnovski/mini.align",
      version = false,

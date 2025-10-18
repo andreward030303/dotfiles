@@ -4,7 +4,14 @@ vim.g.mapleader = " "
 local map = vim.keymap.set
 
 -- ファイル操作/タブ操作
-map("n", "<leader>e", ":Ex<CR>", { desc = "Explore (netrw)" })
+-- map("n", "<leader>e", ":Ex<CR>", { desc = "Explore (netrw)" })
+vim.keymap.set("n", "<leader>e", function()
+  local file = vim.fn.expand("%:p")                     -- 現在のファイルの絶対パス
+  vim.cmd("Explore")                                    -- netrwを開く
+  local filename = vim.fn.fnamemodify(file, ":t")       -- ファイル名部分を抽出
+  vim.fn.search("\\V" .. filename, "cw")                -- 一致箇所（ファイル名）にカーソル移動
+end, { desc = "Explore (netrw) and jump to current file" })
+
 -- vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<CR>", { desc = "Neo-tree toggle" })
 -- vim.keymap.set("n", "<leader>e", "<cmd>Neotree reveal left<CR>", { desc = "Open Neo-tree (left sidebar)" })
 map("n", "t", ":tab split<CR>", { desc = "New tab" })
@@ -19,9 +26,10 @@ map("n", "cp", "<C-i>", { desc = "Jump forward" })
 vim.keymap.set("n", "cn", "*N", { desc = "Search word under cursor (stay)" })
 map("n", "cl", "V", { desc = "" })
 map("n", "gi", "I", { desc = "" })
-map("n", "ga", "A", { desc = "" })
+map("n", "go", "A", { desc = "" })
 
-vim.keymap.set("v", "gy", ":w! /app/copy.txt<CR>", { desc = "" })
+vim.keymap.set("v", "gy", ":w! /code/copy.txt<CR>", { desc = "" })
+vim.keymap.set("v", "gp", "=", { desc = "" })
 
 -- === netrw 用キーマップ ===
 local grp = vim.api.nvim_create_augroup("MyNetrwMaps", { clear = true })

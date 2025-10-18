@@ -1,53 +1,24 @@
 #!/bin/bash
+#set -euo pipefail
+#trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
+
+export DEBIAN_FRONTEND=noninteractive
+ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # 必要なパッケージのインストール
 apt update
 apt install -y \
-  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find \
+  wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find tmux\
   locales
-
-# ======================
-# 最新版 fd & ripgrep インストール
-# ======================
-FD_VERSION=9.0.0
-RG_VERSION=14.1.0
-
-echo "🚀 Installing fd ${FD_VERSION}..."
-curl -L "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
-  | tar xz
-cp -f "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu/fd" /usr/local/bin/
-rm -rf "fd-v${FD_VERSION}-x86_64-unknown-linux-gnu"
-
-echo "🚀 Installing ripgrep ${RG_VERSION}..."
-curl -L "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
-  | tar xz
-cp -f "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg" /usr/local/bin/
-rm -rf "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl"
-
-fd --version
-rg --version
-
-# fd を fd として使えるようにリンク（fdfind → fd）
-if [ ! -e /usr/local/bin/fd ]; then
-  ln -s "$(command -v fdfind)" /usr/local/bin/fd
-fi
 
 # ======================
 # ロケール設定 (ja_JP.UTF-8)
 # ======================
 . /etc/os-release
 
-if [ "$ID" = "ubuntu" ]; then
-  # Ubuntu 系
-  apt-get update
-  apt-get install -y language-pack-ja
-elif [ "$ID" = "debian" ]; then
-  # Debian 系
-  apt-get update
-  apt-get install -y locales
-  sed -i '/ja_JP.UTF-8/s/^# //g' /etc/locale.gen
-  locale-gen
-fi
+# Ubuntu 系
+apt-get update
+apt-get install -y language-pack-ja
 
 update-locale LANG=ja_JP.UTF-8 LC_ALL=ja_JP.UTF-8
 
@@ -102,24 +73,6 @@ cd neovim
 git fetch --all
 git checkout v0.11.4
 make CMAKE_BUILD_TYPE=Release
-make install
-cd ~
-
-# ======================
-# tmux ビルド
-# ======================
-apt install -y git build-essential automake bison pkg-config \
-  libevent-dev libncurses5-dev libncursesw5-dev
-
-if [ ! -d "tmux" ]; then
-  git clone https://github.com/tmux/tmux.git
-fi
-cd tmux
-git fetch --all
-git checkout 3.5a
-sh autogen.sh
-./configure
-make
 make install
 cd ~
 

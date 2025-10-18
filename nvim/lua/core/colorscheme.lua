@@ -20,7 +20,7 @@ vim.cmd("syntax on")
 -- vim.cmd.colorscheme("monokai")
 
 require("tokyonight").setup({
-  style = "moon", -- "storm", "moon", "night", "day"
+  style = "storm", -- "storm", "moon", "night", "day"
   transparent = true,
 })
 vim.cmd("colorscheme tokyonight")
