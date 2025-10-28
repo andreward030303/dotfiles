@@ -21,6 +21,9 @@ opt.hlsearch = false
 
 vim.o.updatetime = 500  -- 0.5秒くらいが VSCode っぽい
 
+vim.g.editorconfig = false
+vim.opt.fileformats = { "unix", "dos" }
+
 opt.mouse = ""
 
 vim.opt.termguicolors = true
