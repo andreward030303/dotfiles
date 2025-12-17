@@ -29,16 +29,19 @@ M.colors = {
   red_deep     = "#4a0a0a",      -- very dark red (for backgrounds)
   red_blood    = "#aa0a0a",      -- blood red
 
+  -- Orange spectrum (強化🔥) 🟠
+  orange_glow  = "#ff6600",      -- brightest neon orange (NEW!)
+  orange_neon  = "#ff5a2a",      -- bright orange neon
+  orange       = "#e85a30",      -- standard orange
+  orange_ember = "#ff4500",      -- ember orange (NEW!)
+  amber        = "#ffaa00",      -- amber/gold (brighter!)
+  amber_dark   = "#cc8800",      -- darker amber
+
   -- Pink/Magenta spectrum 🩷
   pink_neon    = "#ff2a6a",      -- hot pink neon
   pink         = "#e8457a",      -- pink
   magenta      = "#c83878",      -- magenta
   magenta_dark = "#8a2858",      -- dark magenta
-
-  -- Orange spectrum 🟠
-  orange_neon  = "#ff5a2a",      -- bright orange
-  orange       = "#e85a30",      -- orange
-  amber        = "#d4842a",      -- amber/gold
 
   -- Cyan/Blue spectrum (accent colors) 🔵
   cyan_neon    = "#00e8ff",      -- brightest cyan glow
@@ -52,11 +55,11 @@ M.colors = {
   gray         = "#505060",      -- medium gray
   gray_dark    = "#282832",      -- dark gray
   gray_darker  = "#18181f",      -- darker gray
-  comment      = "#5a3838",      -- reddish gray for comments
+  comment      = "#6a4040",      -- warmer reddish-orange for comments
 
   -- Semantic colors
   success      = "#30c850",      -- green
-  warning      = "#e8a830",      -- yellow/orange
+  warning      = "#ff9020",      -- brighter orange warning
   error        = "#ff2020",      -- bright red
   info         = "#20c8e8",      -- cyan
   hint         = "#808090",      -- gray
@@ -113,46 +116,46 @@ M.setup = function()
   -- Syntax Highlighting
   ----------------------------------------------------------------------------
   h(0, "Comment",       { fg = c.comment, italic = true })
-  h(0, "String",        { fg = c.pink })
-  h(0, "Character",     { fg = c.pink_neon })
+  h(0, "String",        { fg = c.amber })           -- オレンジ寄りに変更
+  h(0, "Character",     { fg = c.orange_glow })     -- ネオンオレンジ
   h(0, "Number",        { fg = c.orange_neon })
   h(0, "Float",         { fg = c.orange_neon })
-  h(0, "Boolean",       { fg = c.orange, bold = true })
+  h(0, "Boolean",       { fg = c.orange_glow, bold = true })
 
   h(0, "Identifier",    { fg = c.fg })
   h(0, "Function",      { fg = c.red_neon })
 
   h(0, "Statement",     { fg = c.red_neon })
   h(0, "Conditional",   { fg = c.red_glow, bold = true })
-  h(0, "Repeat",        { fg = c.red_glow, bold = true })
-  h(0, "Label",         { fg = c.red })
+  h(0, "Repeat",        { fg = c.orange_ember, bold = true })  -- ループはオレンジ
+  h(0, "Label",         { fg = c.orange })
   h(0, "Keyword",       { fg = c.red_glow, bold = true })
-  h(0, "Exception",     { fg = c.red_glow, bold = true })
+  h(0, "Exception",     { fg = c.orange_ember, bold = true })  -- 例外はオレンジ
   h(0, "Operator",      { fg = c.red })
 
-  h(0, "PreProc",       { fg = c.magenta })
-  h(0, "Include",       { fg = c.pink_neon })
-  h(0, "Define",        { fg = c.magenta })
-  h(0, "Macro",         { fg = c.pink_neon })
-  h(0, "PreCondit",     { fg = c.magenta })
+  h(0, "PreProc",       { fg = c.orange })          -- プリプロセッサはオレンジ
+  h(0, "Include",       { fg = c.orange_neon })     -- importはネオンオレンジ
+  h(0, "Define",        { fg = c.orange })
+  h(0, "Macro",         { fg = c.orange_glow })
+  h(0, "PreCondit",     { fg = c.orange })
 
   h(0, "Type",          { fg = c.cyan })
   h(0, "StorageClass",  { fg = c.cyan, bold = true })
   h(0, "Structure",     { fg = c.cyan })
   h(0, "Typedef",       { fg = c.cyan })
 
-  h(0, "Special",       { fg = c.orange })
-  h(0, "SpecialChar",   { fg = c.orange_neon })
+  h(0, "Special",       { fg = c.orange_neon })
+  h(0, "SpecialChar",   { fg = c.orange_glow })
   h(0, "Tag",           { fg = c.red_neon })
   h(0, "Delimiter",     { fg = c.fg_dark })
-  h(0, "SpecialComment",{ fg = c.red_dark, italic = true })
-  h(0, "Debug",         { fg = c.orange_neon })
+  h(0, "SpecialComment",{ fg = c.amber_dark, italic = true })
+  h(0, "Debug",         { fg = c.orange_glow })
 
   h(0, "Underlined",    { fg = c.cyan, underline = true })
   h(0, "Bold",          { bold = true })
   h(0, "Italic",        { italic = true })
   h(0, "Error",         { fg = c.error, bold = true })
-  h(0, "Todo",          { fg = c.bg, bg = c.amber, bold = true })
+  h(0, "Todo",          { fg = c.bg, bg = c.orange_glow, bold = true })  -- TODOをオレンジに
 
   ----------------------------------------------------------------------------
   -- UI Elements
@@ -257,32 +260,32 @@ M.setup = function()
   ----------------------------------------------------------------------------
   -- Identifiers
   h(0, "@variable",                   { fg = c.fg })
-  h(0, "@variable.builtin",           { fg = c.red })
-  h(0, "@variable.parameter",         { fg = c.orange })
-  h(0, "@variable.parameter.builtin", { fg = c.orange })
+  h(0, "@variable.builtin",           { fg = c.orange })        -- self, this をオレンジに
+  h(0, "@variable.parameter",         { fg = c.orange_neon })   -- パラメータをネオンオレンジ
+  h(0, "@variable.parameter.builtin", { fg = c.orange_neon })
   h(0, "@variable.member",            { fg = c.fg })
 
-  h(0, "@constant",                   { fg = c.orange })
-  h(0, "@constant.builtin",           { fg = c.orange_neon, bold = true })
-  h(0, "@constant.macro",             { fg = c.orange_neon })
+  h(0, "@constant",                   { fg = c.orange_glow })   -- 定数はネオンオレンジ
+  h(0, "@constant.builtin",           { fg = c.orange_glow, bold = true })
+  h(0, "@constant.macro",             { fg = c.orange_glow })
 
   h(0, "@module",                     { fg = c.cyan })
   h(0, "@module.builtin",             { fg = c.cyan })
-  h(0, "@label",                      { fg = c.red })
+  h(0, "@label",                      { fg = c.orange })
 
   -- Literals
-  h(0, "@string",                     { fg = c.pink })
-  h(0, "@string.documentation",       { fg = c.pink })
-  h(0, "@string.regex",               { fg = c.pink_neon })
-  h(0, "@string.escape",              { fg = c.orange_neon })
+  h(0, "@string",                     { fg = c.amber })         -- 文字列をアンバーに
+  h(0, "@string.documentation",       { fg = c.amber_dark })
+  h(0, "@string.regex",               { fg = c.orange_neon })   -- 正規表現をオレンジ
+  h(0, "@string.escape",              { fg = c.orange_glow })   -- エスケープ文字
   h(0, "@string.special",             { fg = c.orange })
-  h(0, "@string.special.symbol",      { fg = c.pink_neon })
+  h(0, "@string.special.symbol",      { fg = c.orange_neon })
   h(0, "@string.special.url",         { fg = c.cyan, underline = true })
 
-  h(0, "@character",                  { fg = c.pink_neon })
-  h(0, "@character.special",          { fg = c.orange_neon })
+  h(0, "@character",                  { fg = c.orange_glow })
+  h(0, "@character.special",          { fg = c.orange_glow })
 
-  h(0, "@boolean",                    { fg = c.orange, bold = true })
+  h(0, "@boolean",                    { fg = c.orange_glow, bold = true })
   h(0, "@number",                     { fg = c.orange_neon })
   h(0, "@number.float",               { fg = c.orange_neon })
 
@@ -291,15 +294,15 @@ M.setup = function()
   h(0, "@type.builtin",               { fg = c.cyan, italic = true })
   h(0, "@type.definition",            { fg = c.cyan })
 
-  h(0, "@attribute",                  { fg = c.magenta })
-  h(0, "@attribute.builtin",          { fg = c.magenta })
+  h(0, "@attribute",                  { fg = c.orange })        -- アトリビュートをオレンジ
+  h(0, "@attribute.builtin",          { fg = c.orange_neon })
   h(0, "@property",                   { fg = c.fg })
 
   -- Functions
   h(0, "@function",                   { fg = c.red_neon })
   h(0, "@function.builtin",           { fg = c.red_glow })
   h(0, "@function.call",              { fg = c.red_neon })
-  h(0, "@function.macro",             { fg = c.pink_neon })
+  h(0, "@function.macro",             { fg = c.orange_glow })   -- マクロをオレンジ
 
   h(0, "@function.method",            { fg = c.red_neon })
   h(0, "@function.method.call",       { fg = c.red_neon })
@@ -310,34 +313,34 @@ M.setup = function()
 
   -- Keywords
   h(0, "@keyword",                    { fg = c.red_glow, bold = true })
-  h(0, "@keyword.coroutine",          { fg = c.red_glow, bold = true })
+  h(0, "@keyword.coroutine",          { fg = c.orange_ember, bold = true })  -- async/await オレンジ
   h(0, "@keyword.function",           { fg = c.red_glow, bold = true })
   h(0, "@keyword.operator",           { fg = c.red })
-  h(0, "@keyword.import",             { fg = c.pink_neon })
+  h(0, "@keyword.import",             { fg = c.orange_neon })   -- import をオレンジ
   h(0, "@keyword.type",               { fg = c.red_glow })
   h(0, "@keyword.modifier",           { fg = c.red_glow })
-  h(0, "@keyword.repeat",             { fg = c.red_glow, bold = true })
-  h(0, "@keyword.return",             { fg = c.red_glow, bold = true })
-  h(0, "@keyword.debug",              { fg = c.orange_neon })
-  h(0, "@keyword.exception",          { fg = c.red_glow, bold = true })
+  h(0, "@keyword.repeat",             { fg = c.orange_ember, bold = true })  -- ループはオレンジ
+  h(0, "@keyword.return",             { fg = c.orange_neon, bold = true })   -- returnはオレンジ
+  h(0, "@keyword.debug",              { fg = c.orange_glow })
+  h(0, "@keyword.exception",          { fg = c.orange_ember, bold = true })  -- try/catchはオレンジ
 
   h(0, "@keyword.conditional",        { fg = c.red_glow, bold = true })
-  h(0, "@keyword.conditional.ternary",{ fg = c.red })
+  h(0, "@keyword.conditional.ternary",{ fg = c.orange })
 
-  h(0, "@keyword.directive",          { fg = c.magenta })
-  h(0, "@keyword.directive.define",   { fg = c.magenta })
+  h(0, "@keyword.directive",          { fg = c.orange })
+  h(0, "@keyword.directive.define",   { fg = c.orange_neon })
 
   -- Punctuation
   h(0, "@punctuation.delimiter",      { fg = c.gray })
   h(0, "@punctuation.bracket",        { fg = c.fg_dark })
-  h(0, "@punctuation.special",        { fg = c.red })
+  h(0, "@punctuation.special",        { fg = c.orange })  -- 特殊記号をオレンジ
 
   -- Comments
   h(0, "@comment",                    { fg = c.comment, italic = true })
   h(0, "@comment.documentation",      { fg = c.comment, italic = true })
   h(0, "@comment.error",              { fg = c.error, bg = c.red_deep })
   h(0, "@comment.warning",            { fg = c.warning })
-  h(0, "@comment.todo",               { fg = c.bg, bg = c.amber, bold = true })
+  h(0, "@comment.todo",               { fg = c.bg, bg = c.orange_glow, bold = true })  -- TODOはオレンジ
   h(0, "@comment.note",               { fg = c.info })
 
   -- Markup (Markdown, etc.)
@@ -347,29 +350,29 @@ M.setup = function()
   h(0, "@markup.underline",           { underline = true })
   h(0, "@markup.heading",             { fg = c.red_glow, bold = true })
   h(0, "@markup.heading.1",           { fg = c.red_glow, bold = true })
-  h(0, "@markup.heading.2",           { fg = c.red_neon, bold = true })
-  h(0, "@markup.heading.3",           { fg = c.red, bold = true })
-  h(0, "@markup.heading.4",           { fg = c.pink_neon, bold = true })
-  h(0, "@markup.heading.5",           { fg = c.pink, bold = true })
-  h(0, "@markup.heading.6",           { fg = c.magenta, bold = true })
+  h(0, "@markup.heading.2",           { fg = c.orange_glow, bold = true })  -- h2はオレンジ
+  h(0, "@markup.heading.3",           { fg = c.red_neon, bold = true })
+  h(0, "@markup.heading.4",           { fg = c.orange_neon, bold = true })  -- h4はオレンジ
+  h(0, "@markup.heading.5",           { fg = c.amber, bold = true })
+  h(0, "@markup.heading.6",           { fg = c.orange, bold = true })
 
-  h(0, "@markup.quote",               { fg = c.fg_dark, italic = true })
+  h(0, "@markup.quote",               { fg = c.amber_dark, italic = true })  -- 引用をアンバー
   h(0, "@markup.math",                { fg = c.cyan })
   h(0, "@markup.link",                { fg = c.cyan })
-  h(0, "@markup.link.label",          { fg = c.pink })
+  h(0, "@markup.link.label",          { fg = c.orange })
   h(0, "@markup.link.url",            { fg = c.cyan, underline = true })
 
-  h(0, "@markup.raw",                 { fg = c.pink })
-  h(0, "@markup.raw.block",           { fg = c.pink })
+  h(0, "@markup.raw",                 { fg = c.amber })  -- コードブロックをアンバー
+  h(0, "@markup.raw.block",           { fg = c.amber })
 
-  h(0, "@markup.list",                { fg = c.red })
+  h(0, "@markup.list",                { fg = c.orange })  -- リストをオレンジ
   h(0, "@markup.list.checked",        { fg = c.success })
   h(0, "@markup.list.unchecked",      { fg = c.fg_gutter })
 
   -- Tags (HTML, XML, JSX)
   h(0, "@tag",                        { fg = c.red_neon })
   h(0, "@tag.builtin",                { fg = c.red_neon })
-  h(0, "@tag.attribute",              { fg = c.orange })
+  h(0, "@tag.attribute",              { fg = c.orange_neon })  -- 属性をネオンオレンジ
   h(0, "@tag.delimiter",              { fg = c.gray })
 
   ----------------------------------------------------------------------------
@@ -377,31 +380,31 @@ M.setup = function()
   ----------------------------------------------------------------------------
   h(0, "@lsp.type.class",             { fg = c.cyan })
   h(0, "@lsp.type.comment",           { fg = c.comment, italic = true })
-  h(0, "@lsp.type.decorator",         { fg = c.magenta })
+  h(0, "@lsp.type.decorator",         { fg = c.orange_neon })   -- デコレータをオレンジ
   h(0, "@lsp.type.enum",              { fg = c.cyan })
-  h(0, "@lsp.type.enumMember",        { fg = c.orange })
+  h(0, "@lsp.type.enumMember",        { fg = c.orange_glow })   -- enum値をオレンジ
   h(0, "@lsp.type.function",          { fg = c.red_neon })
   h(0, "@lsp.type.interface",         { fg = c.cyan })
   h(0, "@lsp.type.keyword",           { fg = c.red_glow, bold = true })
-  h(0, "@lsp.type.macro",             { fg = c.pink_neon })
+  h(0, "@lsp.type.macro",             { fg = c.orange_glow })   -- マクロをオレンジ
   h(0, "@lsp.type.method",            { fg = c.red_neon })
   h(0, "@lsp.type.namespace",         { fg = c.cyan })
   h(0, "@lsp.type.number",            { fg = c.orange_neon })
   h(0, "@lsp.type.operator",          { fg = c.red })
-  h(0, "@lsp.type.parameter",         { fg = c.orange })
+  h(0, "@lsp.type.parameter",         { fg = c.orange_neon })   -- パラメータをオレンジ
   h(0, "@lsp.type.property",          { fg = c.fg })
-  h(0, "@lsp.type.string",            { fg = c.pink })
+  h(0, "@lsp.type.string",            { fg = c.amber })         -- 文字列をアンバー
   h(0, "@lsp.type.struct",            { fg = c.cyan })
   h(0, "@lsp.type.type",              { fg = c.cyan })
   h(0, "@lsp.type.typeParameter",     { fg = c.cyan })
   h(0, "@lsp.type.variable",          { fg = c.fg })
 
   h(0, "@lsp.mod.deprecated",         { strikethrough = true })
-  h(0, "@lsp.mod.readonly",           { italic = true })
-  h(0, "@lsp.mod.defaultLibrary",     { fg = c.red })
+  h(0, "@lsp.mod.readonly",           { fg = c.orange, italic = true })  -- readonlyをオレンジ
+  h(0, "@lsp.mod.defaultLibrary",     { fg = c.orange })
 
   h(0, "@lsp.typemod.function.defaultLibrary", { fg = c.red_glow })
-  h(0, "@lsp.typemod.variable.defaultLibrary", { fg = c.red })
+  h(0, "@lsp.typemod.variable.defaultLibrary", { fg = c.orange })
 
   ----------------------------------------------------------------------------
   -- LSP References
@@ -409,10 +412,10 @@ M.setup = function()
   h(0, "LspReferenceText",            { bg = c.gray_dark })
   h(0, "LspReferenceRead",            { bg = c.gray_dark })
   h(0, "LspReferenceWrite",           { bg = c.gray_dark, underline = true })
-  h(0, "LspSignatureActiveParameter", { fg = c.red_glow, bold = true, underline = true })
+  h(0, "LspSignatureActiveParameter", { fg = c.orange_glow, bold = true, underline = true })  -- シグネチャをオレンジ
   h(0, "LspCodeLens",                 { fg = c.comment })
   h(0, "LspCodeLensSeparator",        { fg = c.gray_dark })
-  h(0, "LspInlayHint",                { fg = c.comment, bg = c.bg_alt, italic = true })
+  h(0, "LspInlayHint",                { fg = c.amber_dark, bg = c.bg_alt, italic = true })  -- ヒントをアンバー
 
   ----------------------------------------------------------------------------
   -- Plugins
@@ -422,9 +425,9 @@ M.setup = function()
   h(0, "TelescopeNormal",             { fg = c.fg, bg = c.bg_popup })
   h(0, "TelescopeBorder",             { fg = c.red_dark, bg = c.bg_popup })
   h(0, "TelescopePromptNormal",       { fg = c.fg, bg = c.bg_highlight })
-  h(0, "TelescopePromptBorder",       { fg = c.red_neon, bg = c.bg_highlight })
-  h(0, "TelescopePromptTitle",        { fg = c.bg, bg = c.red_neon, bold = true })
-  h(0, "TelescopePromptPrefix",       { fg = c.red_neon })
+  h(0, "TelescopePromptBorder",       { fg = c.orange_neon, bg = c.bg_highlight })  -- プロンプトをオレンジ
+  h(0, "TelescopePromptTitle",        { fg = c.bg, bg = c.orange_glow, bold = true })  -- タイトルをオレンジ
+  h(0, "TelescopePromptPrefix",       { fg = c.orange_glow })
   h(0, "TelescopePromptCounter",      { fg = c.fg_dark })
   h(0, "TelescopeResultsNormal",      { fg = c.fg, bg = c.bg_popup })
   h(0, "TelescopeResultsBorder",      { fg = c.gray_dark, bg = c.bg_popup })
@@ -455,57 +458,57 @@ M.setup = function()
   h(0, "CmpItemKindClass",            { fg = c.cyan })
   h(0, "CmpItemKindInterface",        { fg = c.cyan })
   h(0, "CmpItemKindModule",           { fg = c.cyan })
-  h(0, "CmpItemKindProperty",         { fg = c.orange })
+  h(0, "CmpItemKindProperty",         { fg = c.orange_neon })   -- プロパティをオレンジ
   h(0, "CmpItemKindUnit",             { fg = c.orange_neon })
-  h(0, "CmpItemKindValue",            { fg = c.orange })
+  h(0, "CmpItemKindValue",            { fg = c.orange_glow })   -- 値をオレンジ
   h(0, "CmpItemKindEnum",             { fg = c.cyan })
   h(0, "CmpItemKindKeyword",          { fg = c.red_glow })
-  h(0, "CmpItemKindSnippet",          { fg = c.pink_neon })
-  h(0, "CmpItemKindColor",            { fg = c.pink })
+  h(0, "CmpItemKindSnippet",          { fg = c.orange_glow })   -- スニペットをオレンジ
+  h(0, "CmpItemKindColor",            { fg = c.amber })
   h(0, "CmpItemKindFile",             { fg = c.fg })
   h(0, "CmpItemKindReference",        { fg = c.cyan })
-  h(0, "CmpItemKindFolder",           { fg = c.cyan })
-  h(0, "CmpItemKindEnumMember",       { fg = c.orange })
-  h(0, "CmpItemKindConstant",         { fg = c.orange_neon })
+  h(0, "CmpItemKindFolder",           { fg = c.amber })         -- フォルダをアンバー
+  h(0, "CmpItemKindEnumMember",       { fg = c.orange_glow })
+  h(0, "CmpItemKindConstant",         { fg = c.orange_glow })   -- 定数をオレンジ
   h(0, "CmpItemKindStruct",           { fg = c.cyan })
-  h(0, "CmpItemKindEvent",            { fg = c.magenta })
+  h(0, "CmpItemKindEvent",            { fg = c.orange_ember })  -- イベントをオレンジ
   h(0, "CmpItemKindOperator",         { fg = c.red })
   h(0, "CmpItemKindTypeParameter",    { fg = c.cyan })
   h(0, "CmpItemKindCopilot",          { fg = c.cyan_neon })
 
   -- Gitsigns
   h(0, "GitSignsAdd",                 { fg = c.success })
-  h(0, "GitSignsChange",              { fg = c.info })
+  h(0, "GitSignsChange",              { fg = c.amber })         -- 変更をアンバーに
   h(0, "GitSignsDelete",              { fg = c.error })
   h(0, "GitSignsAddNr",               { fg = c.success })
-  h(0, "GitSignsChangeNr",            { fg = c.info })
+  h(0, "GitSignsChangeNr",            { fg = c.amber })
   h(0, "GitSignsDeleteNr",            { fg = c.error })
   h(0, "GitSignsAddLn",               { bg = "#0a2818" })
-  h(0, "GitSignsChangeLn",            { bg = "#18182a" })
+  h(0, "GitSignsChangeLn",            { bg = "#1a1808" })       -- オレンジ系の背景
   h(0, "GitSignsDeleteLn",            { bg = "#280a10" })
   h(0, "GitSignsCurrentLineBlame",    { fg = c.comment, italic = true })
 
   -- Indent Blankline
   h(0, "IblIndent",                   { fg = c.gray_darker })
-  h(0, "IblScope",                    { fg = c.red_dark })
+  h(0, "IblScope",                    { fg = c.orange })        -- スコープをオレンジ
   h(0, "IndentBlanklineChar",         { fg = c.gray_darker })
-  h(0, "IndentBlanklineContextChar",  { fg = c.red_dark })
+  h(0, "IndentBlanklineContextChar",  { fg = c.orange })
 
   -- Neo-tree
   h(0, "NeoTreeNormal",               { fg = c.fg, bg = c.bg_dark })
   h(0, "NeoTreeNormalNC",             { fg = c.fg_dark, bg = c.bg_dark })
-  h(0, "NeoTreeRootName",             { fg = c.red_neon, bold = true })
+  h(0, "NeoTreeRootName",             { fg = c.orange_glow, bold = true })  -- ルートをオレンジ
   h(0, "NeoTreeDirectoryName",        { fg = c.cyan })
-  h(0, "NeoTreeDirectoryIcon",        { fg = c.cyan_dark })
+  h(0, "NeoTreeDirectoryIcon",        { fg = c.amber })         -- フォルダアイコンをアンバー
   h(0, "NeoTreeFileName",             { fg = c.fg })
   h(0, "NeoTreeFileIcon",             { fg = c.fg_dark })
   h(0, "NeoTreeGitAdded",             { fg = c.success })
   h(0, "NeoTreeGitConflict",          { fg = c.error })
   h(0, "NeoTreeGitDeleted",           { fg = c.error })
   h(0, "NeoTreeGitIgnored",           { fg = c.fg_gutter })
-  h(0, "NeoTreeGitModified",          { fg = c.info })
-  h(0, "NeoTreeGitUnstaged",          { fg = c.warning })
-  h(0, "NeoTreeGitUntracked",         { fg = c.magenta })
+  h(0, "NeoTreeGitModified",          { fg = c.amber })         -- 変更をアンバー
+  h(0, "NeoTreeGitUnstaged",          { fg = c.orange_neon })   -- unstaged をオレンジ
+  h(0, "NeoTreeGitUntracked",         { fg = c.orange })
   h(0, "NeoTreeGitStaged",            { fg = c.success })
   h(0, "NeoTreeIndentMarker",         { fg = c.gray_dark })
   h(0, "NeoTreeCursorLine",           { bg = c.bg_highlight })
@@ -513,7 +516,7 @@ M.setup = function()
   -- nvim-tree
   h(0, "NvimTreeNormal",              { fg = c.fg, bg = c.bg_dark })
   h(0, "NvimTreeNormalNC",            { fg = c.fg_dark, bg = c.bg_dark })
-  h(0, "NvimTreeRootFolder",          { fg = c.red_neon, bold = true })
+  h(0, "NvimTreeRootFolder",          { fg = c.orange_glow, bold = true })  -- ルートをオレンジ
   h(0, "NvimTreeFolderName",          { fg = c.cyan })
   h(0, "NvimTreeFolderIcon",          { fg = c.cyan_dark })
   h(0, "NvimTreeOpenedFolderName",    { fg = c.cyan, bold = true })
@@ -757,18 +760,18 @@ M.setup = function()
   h(0, "NavicIconsOperator",          { fg = c.red })
   h(0, "NavicIconsTypeParameter",     { fg = c.cyan })
   h(0, "NavicText",                   { fg = c.fg })
-  h(0, "NavicSeparator",              { fg = c.gray })
+  h(0, "NavicSeparator",              { fg = c.orange })  -- セパレータをオレンジ
 
   -- Hop
-  h(0, "HopNextKey",                  { fg = c.red_glow, bold = true })
-  h(0, "HopNextKey1",                 { fg = c.cyan_neon, bold = true })
-  h(0, "HopNextKey2",                 { fg = c.cyan })
+  h(0, "HopNextKey",                  { fg = c.orange_glow, bold = true })  -- ホップをオレンジ
+  h(0, "HopNextKey1",                 { fg = c.red_glow, bold = true })
+  h(0, "HopNextKey2",                 { fg = c.amber })
   h(0, "HopUnmatched",                { fg = c.comment })
 
   -- Leap
   h(0, "LeapMatch",                   { fg = c.fg, bg = c.bg_visual })
-  h(0, "LeapLabelPrimary",            { fg = c.bg, bg = c.red_glow, bold = true })
-  h(0, "LeapLabelSecondary",          { fg = c.bg, bg = c.pink_neon, bold = true })
+  h(0, "LeapLabelPrimary",            { fg = c.bg, bg = c.orange_glow, bold = true })  -- プライマリをオレンジ
+  h(0, "LeapLabelSecondary",          { fg = c.bg, bg = c.red_glow, bold = true })
   h(0, "LeapBackdrop",                { fg = c.comment })
 end
 
@@ -780,16 +783,16 @@ M.lualine = {
     c = { fg = M.colors.fg_dark, bg = M.colors.bg_alt },
   },
   insert = {
-    a = { fg = M.colors.bg, bg = M.colors.cyan, gui = "bold" },
+    a = { fg = M.colors.bg, bg = M.colors.orange_glow, gui = "bold" },  -- インサートをオレンジに
   },
   visual = {
-    a = { fg = M.colors.bg, bg = M.colors.pink_neon, gui = "bold" },
+    a = { fg = M.colors.bg, bg = M.colors.cyan, gui = "bold" },
   },
   replace = {
-    a = { fg = M.colors.bg, bg = M.colors.orange_neon, gui = "bold" },
+    a = { fg = M.colors.bg, bg = M.colors.amber, gui = "bold" },
   },
   command = {
-    a = { fg = M.colors.bg, bg = M.colors.amber, gui = "bold" },
+    a = { fg = M.colors.bg, bg = M.colors.orange_ember, gui = "bold" },  -- コマンドをオレンジに
   },
   inactive = {
     a = { fg = M.colors.fg_gutter, bg = M.colors.bg_dark },
