@@ -2,10 +2,10 @@
 -- Rust (rust-analyzer)
 --------------------------------------------------------------------------------
 local lspconfig = require("lspconfig")
-local common = require("plugins.lsp")
+local common = require("plugins.lsp.common")
 
 lspconfig.rust_analyzer.setup({
-  capabilities = common.capabilities(),
+  capabilities = common.capabilities,
   on_attach = common.on_attach,
   settings = {
     ["rust-analyzer"] = {

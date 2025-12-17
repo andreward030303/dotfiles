@@ -2,11 +2,11 @@
 -- TypeScript / JavaScript / React / Next.js
 --------------------------------------------------------------------------------
 local lspconfig = require("lspconfig")
-local common = require("plugins.lsp")
+local common = require("plugins.lsp.common")
 
 -- TypeScript Language Server
 lspconfig.ts_ls.setup({
-  capabilities = common.capabilities(),
+  capabilities = common.capabilities,
   on_attach = common.on_attach,
   filetypes = {
     "javascript", "javascriptreact", "javascript.jsx",
@@ -16,7 +16,7 @@ lspconfig.ts_ls.setup({
 
 -- ESLint (保存時自動修正)
 lspconfig.eslint.setup({
-  capabilities = common.capabilities(),
+  capabilities = common.capabilities,
   on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
       buffer = bufnr,
@@ -28,6 +28,6 @@ lspconfig.eslint.setup({
 
 -- Tailwind CSS
 lspconfig.tailwindcss.setup({
-  capabilities = common.capabilities(),
+  capabilities = common.capabilities,
   on_attach = common.on_attach,
 })

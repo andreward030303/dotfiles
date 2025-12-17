@@ -2,10 +2,10 @@
 -- Go (gopls)
 --------------------------------------------------------------------------------
 local lspconfig = require("lspconfig")
-local common = require("plugins.lsp")
+local common = require("plugins.lsp.common")
 
 lspconfig.gopls.setup({
-  capabilities = common.capabilities(),
+  capabilities = common.capabilities,
   on_attach = function(client, bufnr)
     -- 保存時に自動フォーマット
     vim.api.nvim_create_autocmd("BufWritePre", {

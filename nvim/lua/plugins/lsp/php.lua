@@ -3,10 +3,10 @@
 --------------------------------------------------------------------------------
 local lspconfig = require("lspconfig")
 local util = require("lspconfig.util")
-local common = require("plugins.lsp")
+local common = require("plugins.lsp.common")
 
 lspconfig.intelephense.setup({
-  capabilities = common.capabilities(),
+  capabilities = common.capabilities,
   on_attach = common.on_attach,
   root_dir = util.root_pattern("composer.json", ".git"),
   settings = {

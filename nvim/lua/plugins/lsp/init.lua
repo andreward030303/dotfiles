@@ -1,32 +1,6 @@
 --------------------------------------------------------------------------------
--- LSP 共通設定 (Mason + null-ls + 共通 on_attach)
--- 言語別設定は同ディレクトリの各ファイルを参照
---------------------------------------------------------------------------------
-
--- 共通 on_attach (全言語で使用)
-local M = {}
-
-M.on_attach = function(_, bufnr)
-  local opts = { buffer = bufnr, noremap = true, silent = true }
-
-  vim.keymap.set("n", "gd", function()
-    vim.cmd("tab split")
-    vim.lsp.buf.definition()
-  end, opts)
-
-  vim.keymap.set("n", "gr", function()
-    require("telescope.builtin").lsp_references()
-  end, { buffer = bufnr, noremap = true, silent = true, desc = "Find References" })
-
-  vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts)
-end
-
-M.capabilities = function()
-  return require("cmp_nvim_lsp").default_capabilities()
-end
-
---------------------------------------------------------------------------------
--- プラグイン定義
+-- LSP プラグイン定義 (Mason + null-ls)
+-- 共通設定: common.lua / 言語別設定: 各言語ファイル
 --------------------------------------------------------------------------------
 return {
   -- Mason
