@@ -1,93 +1,92 @@
 --------------------------------------------------------------------------------
 -- tron-ares.nvim
--- Custom Theme - 5色ベースのカラースキーム
--- #b81132 #5a2dd6 #c24725 #258dc2 #2dab24
+-- TRON ARES - Digital Grid × Neon Edge × Cyber Circuit
+-- 5色ベース: #b81132 #5a2dd6 #c24725 #258dc2 #2dab24
+-- サイバーグリッドの世界、光るエッジ、デジタル回路
 --------------------------------------------------------------------------------
 
 local M = {}
 
--- Color palette - 5色ベース
+-- Color palette - TRON ARES (5色ベース + サイバー拡張)
 M.colors = {
-  -- Backgrounds (ダークベース)
-  bg           = "#0a0a0c",      -- dark base
-  bg_dark      = "#060608",      -- deeper dark
-  bg_alt       = "#0e0e12",      -- slightly elevated
-  bg_highlight = "#141418",      -- subtle highlight
-  bg_visual    = "#1a1a2a",      -- selection (紫系)
-  bg_popup     = "#0c0c10",      -- popup
+  -- Backgrounds (デジタルヴォイド - 青みがかった黒)
+  bg           = "#050508",      -- digital void (深い青黒)
+  bg_dark      = "#030305",      -- abyss
+  bg_alt       = "#08080c",      -- circuit layer
+  bg_highlight = "#0c0c14",      -- grid highlight (青みのある暗色)
+  bg_visual    = "#18102a",      -- selection (パープルグリッド)
+  bg_popup     = "#080810",      -- popup panel
 
-  -- Foregrounds
-  fg           = "#d0d4dc",      -- main text
-  fg_dark      = "#9098a8",      -- dimmed text
-  fg_gutter    = "#404858",      -- line numbers
+  -- Foregrounds (ホログラム風)
+  fg           = "#c8d0e0",      -- hologram white
+  fg_dark      = "#8090a8",      -- dimmed hologram
+  fg_gutter    = "#384058",      -- grid numbers
 
-  -- 🔴 Red spectrum (base: #b81132)
-  red_neon     = "#e01840",      -- ネオンレッド（明るめ）
-  red_glow     = "#d01838",      -- レッドグロウ
-  red_bright   = "#f02050",      -- ブライトレッド
-  red          = "#b81132",      -- ★ベースカラー
-  red_dark     = "#8a0d26",      -- darker red
-  red_deep     = "#2a0810",      -- very dark red
+  -- ARES RED spectrum (base: #b81132) - 戦闘システム、アラート
+  red_neon     = "#ff1848",      -- ネオンレッド（TRON光彩）
+  red_glow     = "#e82040",      -- エッジグロウ
+  red_bright   = "#ff3058",      -- ブライトアラート
+  red          = "#b81132",      -- ベースカラー (ARES)
+  red_dark     = "#801020",      -- ダークシステム
+  red_deep     = "#200810",      -- サブシステム
 
-  -- 🩷 Pink/Magenta spectrum (redから派生)
-  pink_neon    = "#e83878",      -- ホットピンク
-  pink         = "#d84070",      -- ピンク
-  magenta      = "#c03068",      -- マゼンタ
-  magenta_neon = "#f04090",      -- ネオンマゼンタ
+  -- GRID PURPLE spectrum (base: #5a2dd6) - データストリーム
+  purple_neon  = "#8040ff",      -- ネオングリッド
+  purple       = "#5a2dd6",      -- ベースカラー
+  purple_light = "#9858ff",      -- ライトストリーム
+  violet       = "#7038f0",      -- バイオレットパルス
+  violet_neon  = "#a060ff",      -- ネオンパルス
 
-  -- 🟣 Purple spectrum (base: #5a2dd6)
-  purple_neon  = "#7040f0",      -- ネオンパープル（明るめ）
-  purple       = "#5a2dd6",      -- ★ベースカラー
-  purple_light = "#8050f0",      -- ライトパープル
-  violet       = "#6a38e0",      -- バイオレット
-  violet_neon  = "#9050ff",      -- ネオンバイオレット
+  -- CIRCUIT ORANGE spectrum (base: #c24725) - エネルギー、警告
+  orange_neon  = "#ff6030",      -- ネオンサーキット
+  orange       = "#c24725",      -- ベースカラー
+  orange_glow  = "#e05028",      -- エナジーグロウ
+  coral        = "#f06040",      -- コーラルパルス
+  amber        = "#e09018",      -- アンバーコア
 
-  -- 🔵 Blue spectrum (base: #258dc2)
-  cyan_neon    = "#30b8f0",      -- ネオンシアン（明るめ）
-  cyan         = "#40a8d8",      -- シアン
-  cyan_soft    = "#60c0e8",      -- ソフトシアン
-  cyan_dark    = "#1870a0",      -- ダークシアン
-  blue_neon    = "#30a0e8",      -- ネオンブルー
-  blue         = "#258dc2",      -- ★ベースカラー
-  blue_light   = "#48b0e0",      -- ライトブルー
-  blue_dark    = "#1a5080",      -- ダークブルー
+  -- CYAN/BLUE spectrum (base: #258dc2) - メインシステム、UI
+  cyan_neon    = "#00d0ff",      -- ネオンシアン（TRON Classic）
+  cyan         = "#20b8e8",      -- シアンエッジ
+  cyan_soft    = "#50c8f0",      -- ソフトグリッド
+  cyan_dark    = "#1068a0",      -- ダークチャネル
+  blue_neon    = "#40a8ff",      -- ネオンブルー
+  blue         = "#258dc2",      -- ベースカラー
+  blue_light   = "#58b8f0",      -- ライトビーム
+  blue_dark    = "#184878",      -- ディープチャネル
 
-  -- 🟢 Green spectrum (base: #2dab24)
-  green_neon   = "#40d838",      -- ネオングリーン（明るめ）
-  green        = "#2dab24",      -- ★ベースカラー
-  green_soft   = "#50c048",      -- ソフトグリーン
-  teal_neon    = "#30d8a0",      -- ネオンティール
-  teal         = "#28b080",      -- ティール
+  -- SYSTEM GREEN spectrum (base: #2dab24) - 成功、アクティブ
+  green_neon   = "#30ff50",      -- ネオングリーン（システムOK）
+  green        = "#2dab24",      -- ベースカラー
+  green_soft   = "#48c840",      -- ソフトシグナル
+  teal_neon    = "#20f0b0",      -- ネオンティール
+  teal         = "#20a878",      -- ティールチャネル
 
-  -- � Orange spectrum (base: #c24725)
-  orange_neon  = "#e85830",      -- ネオンオレンジ（明るめ）
-  orange       = "#c24725",      -- ★ベースカラー
-  orange_glow  = "#d85030",      -- オレンジグロウ
-  coral        = "#e06048",      -- コーラル
-  amber        = "#d89020",      -- アンバー
+  -- Pink/Magenta (redから派生) - 特殊システム
+  pink_neon    = "#ff3888",      -- ネオンピンク
+  pink         = "#e04878",      -- ピンクパルス
+  magenta      = "#d03070",      -- マゼンタコア
+  magenta_neon = "#ff40a0",      -- ネオンマゼンタ
 
-  -- � Yellow spectrum (orangeから派生)
-  yellow_neon  = "#e8d020",      -- ネオンイエロー
-  yellow       = "#d0c030",      -- イエロー
-  gold         = "#e0a020",      -- ゴールド
+  -- Yellow/Gold (orangeから派生) - ハイライト、注意
+  yellow_neon  = "#f0e020",      -- ネオンイエロー
+  yellow       = "#d8c830",      -- イエローマーク
+  gold         = "#f0a818",      -- ゴールドコア
 
-  -- Grays
-  gray         = "#505060",      -- medium gray
-  gray_dark    = "#303040",      -- dark gray
-  gray_darker  = "#1a1a24",      -- darker gray
-  comment      = "#606878",      -- コメント
+  -- Grid Grays (サイバーグレー)
+  gray         = "#404858",      -- グリッドライン
+  gray_dark    = "#282838",      -- ダークグリッド
+  gray_darker  = "#141420",      -- アビスグリッド
+  comment      = "#505868",      -- コメント（ゴースト）
 
-  -- Semantic colors
-  success      = "#2dab24",      -- green (ベースカラー)
-  warning      = "#c24725",      -- orange (ベースカラー)
-  error        = "#b81132",      -- red (ベースカラー)
-  info         = "#258dc2",      -- blue (ベースカラー)
-  hint         = "#707888",      -- gray
+  -- Semantic colors (システムステータス)
+  success      = "#30e850",      -- システムOK (green派生)
+  warning      = "#f06828",      -- 警告 (orange派生)
+  error        = "#ff2848",      -- エラー (red派生)
+  info         = "#30c0f8",      -- 情報 (blue派生)
+  hint         = "#606878",      -- ヒント
 }
 
 local c = M.colors
-
-M.setup = function()
   vim.cmd("highlight clear")
   if vim.fn.exists("syntax_on") then
     vim.cmd("syntax reset")
