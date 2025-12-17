@@ -87,6 +87,8 @@ M.colors = {
 }
 
 local c = M.colors
+
+M.setup = function()
   vim.cmd("highlight clear")
   if vim.fn.exists("syntax_on") then
     vim.cmd("syntax reset")
