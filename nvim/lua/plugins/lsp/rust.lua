@@ -1,12 +1,12 @@
 --------------------------------------------------------------------------------
 -- Rust (rust-analyzer)
 --------------------------------------------------------------------------------
-local lspconfig = require("lspconfig")
 local common = require("plugins.lsp.common")
 
-lspconfig.rust_analyzer.setup({
-  capabilities = common.capabilities,
-  on_attach = common.on_attach,
+common.setup("rust_analyzer", {
+  cmd = { "rust-analyzer" },
+  filetypes = { "rust" },
+  root_markers = { "Cargo.toml", ".git" },
   settings = {
     ["rust-analyzer"] = {
       checkOnSave = { command = "clippy" },

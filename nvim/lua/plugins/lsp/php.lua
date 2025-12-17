@@ -1,14 +1,12 @@
 --------------------------------------------------------------------------------
 -- PHP (Intelephense)
 --------------------------------------------------------------------------------
-local lspconfig = require("lspconfig")
-local util = require("lspconfig.util")
 local common = require("plugins.lsp.common")
 
-lspconfig.intelephense.setup({
-  capabilities = common.capabilities,
-  on_attach = common.on_attach,
-  root_dir = util.root_pattern("composer.json", ".git"),
+common.setup("intelephense", {
+  cmd = { "intelephense", "--stdio" },
+  filetypes = { "php" },
+  root_markers = { "composer.json", ".git" },
   settings = {
     intelephense = {
       diagnostics = { enable = true },

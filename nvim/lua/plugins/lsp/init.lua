@@ -1,11 +1,8 @@
 --------------------------------------------------------------------------------
 -- LSP プラグイン定義 (Mason + null-ls)
 -- 共通設定: common.lua / 言語別設定: 各言語ファイル
+-- Neovim 0.11+ 新 API (vim.lsp.config) 使用
 --------------------------------------------------------------------------------
-
--- lspconfig の deprecation 警告を抑制 (v3.0.0 まで様子見)
-vim.g.lspconfig_warned = true
-
 return {
   -- Mason
   { "williamboman/mason.nvim", lazy = true },

@@ -1,5 +1,6 @@
 --------------------------------------------------------------------------------
 -- LSP 共通設定 (on_attach, capabilities)
+-- Neovim 0.11+ 新 API (vim.lsp.config) 対応
 --------------------------------------------------------------------------------
 local M = {}
 
@@ -20,6 +21,16 @@ M.on_attach = function(_, bufnr)
   end, { buffer = bufnr, noremap = true, silent = true, desc = "Find References" })
 
   vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts)
+end
+
+-- LSP サーバー設定ヘルパー (vim.lsp.config + vim.lsp.enable)
+M.setup = function(name, config)
+  config = config or {}
+  config.capabilities = config.capabilities or M.capabilities
+  config.on_attach = config.on_attach or M.on_attach
+
+  vim.lsp.config[name] = config
+  vim.lsp.enable(name)
 end
 
 return M
