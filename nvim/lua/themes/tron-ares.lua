@@ -1,87 +1,88 @@
 --------------------------------------------------------------------------------
 -- tron-ares.nvim
--- Cyber Space Neon Theme - 宇宙 × サイバー × ネオン
--- Deep cosmic void with vibrant multi-color neon accents
+-- Custom Theme - 5色ベースのカラースキーム
+-- #b81132 #5a2dd6 #c24725 #258dc2 #2dab24
 --------------------------------------------------------------------------------
 
 local M = {}
 
--- Color palette - Cosmic Cyber Neon
+-- Color palette - 5色ベース
 M.colors = {
-  -- Backgrounds (deep cosmic void)
-  bg           = "#06060c",      -- cosmic void
-  bg_dark      = "#040408",      -- deeper void
-  bg_alt       = "#0a0a14",      -- slightly elevated
-  bg_highlight = "#101020",      -- subtle highlight (宇宙っぽい紫)
-  bg_visual    = "#1a1030",      -- selection (紫系)
-  bg_popup     = "#0c0c18",      -- popup
+  -- Backgrounds (ダークベース)
+  bg           = "#0a0a0c",      -- dark base
+  bg_dark      = "#060608",      -- deeper dark
+  bg_alt       = "#0e0e12",      -- slightly elevated
+  bg_highlight = "#141418",      -- subtle highlight
+  bg_visual    = "#1a1a2a",      -- selection (紫系)
+  bg_popup     = "#0c0c10",      -- popup
 
-  -- Foregrounds (cool white)
-  fg           = "#d8dce8",      -- main text (クールなホワイト)
-  fg_dark      = "#a0a8b8",      -- dimmed text
-  fg_gutter    = "#404860",      -- line numbers
+  -- Foregrounds
+  fg           = "#d0d4dc",      -- main text
+  fg_dark      = "#9098a8",      -- dimmed text
+  fg_gutter    = "#404858",      -- line numbers
 
-  -- 🔴 Red/Pink spectrum (アクセント - 控えめに)
-  red_neon     = "#ff3060",      -- ネオンレッド（ソフトめ）
-  red_glow     = "#ff4070",      -- レッドグロウ
-  red_bright   = "#ff5080",      -- ブライトレッド
-  red          = "#e04060",      -- standard red
-  red_dark     = "#a03050",      -- darker red
-  red_deep     = "#300818",      -- very dark red
+  -- 🔴 Red spectrum (base: #b81132)
+  red_neon     = "#e01840",      -- ネオンレッド（明るめ）
+  red_glow     = "#d01838",      -- レッドグロウ
+  red_bright   = "#f02050",      -- ブライトレッド
+  red          = "#b81132",      -- ★ベースカラー
+  red_dark     = "#8a0d26",      -- darker red
+  red_deep     = "#2a0810",      -- very dark red
 
-  -- 🩷 Pink/Magenta spectrum (キーワード用)
-  pink_neon    = "#ff50a0",      -- ホットピンク
-  pink         = "#ff70b0",      -- ピンク
-  magenta      = "#e040a0",      -- マゼンタ
-  magenta_neon = "#ff20ff",      -- ネオンマゼンタ
+  -- 🩷 Pink/Magenta spectrum (redから派生)
+  pink_neon    = "#e83878",      -- ホットピンク
+  pink         = "#d84070",      -- ピンク
+  magenta      = "#c03068",      -- マゼンタ
+  magenta_neon = "#f04090",      -- ネオンマゼンタ
 
-  -- 🟣 Purple/Violet spectrum (宇宙感)
-  purple_neon  = "#a855ff",      -- ネオンパープル
-  purple       = "#9040ff",      -- パープル
-  purple_light = "#b870ff",      -- ライトパープル
-  violet       = "#8a2be2",      -- バイオレット
-  violet_neon  = "#bf40ff",      -- ネオンバイオレット
+  -- 🟣 Purple spectrum (base: #5a2dd6)
+  purple_neon  = "#7040f0",      -- ネオンパープル（明るめ）
+  purple       = "#5a2dd6",      -- ★ベースカラー
+  purple_light = "#8050f0",      -- ライトパープル
+  violet       = "#6a38e0",      -- バイオレット
+  violet_neon  = "#9050ff",      -- ネオンバイオレット
 
-  -- 🔵 Cyan/Blue spectrum (メイン)
-  cyan_neon    = "#00f0ff",      -- ネオンシアン（メイン）
-  cyan         = "#40e0f0",      -- シアン
-  cyan_soft    = "#70e8f8",      -- ソフトシアン
-  cyan_dark    = "#20a0b0",      -- ダークシアン
-  blue_neon    = "#00aaff",      -- ネオンブルー
-  blue         = "#4090e0",      -- ブルー
-  blue_light   = "#60b0ff",      -- ライトブルー
-  blue_dark    = "#203060",      -- ダークブルー
+  -- 🔵 Blue spectrum (base: #258dc2)
+  cyan_neon    = "#30b8f0",      -- ネオンシアン（明るめ）
+  cyan         = "#40a8d8",      -- シアン
+  cyan_soft    = "#60c0e8",      -- ソフトシアン
+  cyan_dark    = "#1870a0",      -- ダークシアン
+  blue_neon    = "#30a0e8",      -- ネオンブルー
+  blue         = "#258dc2",      -- ★ベースカラー
+  blue_light   = "#48b0e0",      -- ライトブルー
+  blue_dark    = "#1a5080",      -- ダークブルー
 
-  -- 🟢 Green/Teal spectrum
-  green_neon   = "#00ff88",      -- ネオングリーン
-  green        = "#40f0a0",      -- グリーン
-  green_soft   = "#70e8b0",      -- ソフトグリーン
-  teal_neon    = "#00ffd0",      -- ネオンティール
-  teal         = "#40e0c0",      -- ティール
+  -- 🟢 Green spectrum (base: #2dab24)
+  green_neon   = "#40d838",      -- ネオングリーン（明るめ）
+  green        = "#2dab24",      -- ★ベースカラー
+  green_soft   = "#50c048",      -- ソフトグリーン
+  teal_neon    = "#30d8a0",      -- ネオンティール
+  teal         = "#28b080",      -- ティール
 
-  -- 🟡 Yellow/Gold spectrum (控えめに)
-  yellow_neon  = "#f0f020",      -- ネオンイエロー
-  yellow       = "#e8e040",      -- イエロー
-  gold         = "#ffc000",      -- ゴールド
-  amber        = "#ffaa00",      -- アンバー
+  -- � Orange spectrum (base: #c24725)
+  orange_neon  = "#e85830",      -- ネオンオレンジ（明るめ）
+  orange       = "#c24725",      -- ★ベースカラー
+  orange_glow  = "#d85030",      -- オレンジグロウ
+  coral        = "#e06048",      -- コーラル
+  amber        = "#d89020",      -- アンバー
 
-  -- 🟠 Orange spectrum (控えめに)
-  orange_neon  = "#ff8020",      -- ネオンオレンジ
-  orange       = "#ff9040",      -- オレンジ
-  coral        = "#ff7060",      -- コーラル
+  -- � Yellow spectrum (orangeから派生)
+  yellow_neon  = "#e8d020",      -- ネオンイエロー
+  yellow       = "#d0c030",      -- イエロー
+  gold         = "#e0a020",      -- ゴールド
 
-  -- Grays (クールグレー)
-  gray         = "#505868",      -- medium gray
-  gray_dark    = "#303848",      -- dark gray
-  gray_darker  = "#1a1a28",      -- darker gray
-  comment      = "#606880",      -- コメント（クールグレー）
+  -- Grays
+  gray         = "#505060",      -- medium gray
+  gray_dark    = "#303040",      -- dark gray
+  gray_darker  = "#1a1a24",      -- darker gray
+  comment      = "#606878",      -- コメント
 
   -- Semantic colors
-  success      = "#40e080",      -- green
-  warning      = "#f0a030",      -- orange
-  error        = "#ff4060",      -- red
-  info         = "#40d0f0",      -- cyan
-  hint         = "#8090a0",      -- gray
+  success      = "#2dab24",      -- green (ベースカラー)
+  warning      = "#c24725",      -- orange (ベースカラー)
+  error        = "#b81132",      -- red (ベースカラー)
+  info         = "#258dc2",      -- blue (ベースカラー)
+  hint         = "#707888",      -- gray
 }
 
 local c = M.colors
