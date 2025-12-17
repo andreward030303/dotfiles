@@ -13,3 +13,8 @@ require("config.autocmds")
 
 -- 4. プラグイン (lazy.nvim)
 require("config.lazy")
+
+-- 5. カラースキーム (プラグイン読み込み後)
+vim.schedule(function()
+  require("themes.tron-ares").setup()
+end)

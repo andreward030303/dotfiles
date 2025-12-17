@@ -1,28 +1,23 @@
 --------------------------------------------------------------------------------
--- カラースキーム
+-- カラースキーム (バックアップ/代替用)
 --------------------------------------------------------------------------------
 return {
-  -- 自作テーマ: tron-ares (TRON: Ares インスパイア)
-  {
-    "tron-ares",
-    name = "tron-ares",
-    dev = true,  -- ローカルテーマとして扱う
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require("themes.tron-ares").setup()
-    end,
-  },
-
-  -- バックアップ用: tokyonight (切り替え可能)
+  -- tokyonight: :colorscheme tokyonight で切り替え可能
   {
     "folke/tokyonight.nvim",
-    lazy = true,  -- 使う時だけ読み込む
+    lazy = true,
     config = function()
       require("tokyonight").setup({
         style = "storm",
         transparent = true,
       })
     end,
+  },
+
+  -- catppuccin: :colorscheme catppuccin で切り替え可能
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = true,
   },
 }
