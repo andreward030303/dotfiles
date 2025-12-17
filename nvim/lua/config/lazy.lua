@@ -14,4 +14,8 @@ vim.opt.rtp:prepend(lazypath)
 -- plugins/ 配下の全ファイルを自動読み込み
 require("lazy").setup("plugins", {
   change_detection = { notify = false },
+  dev = {
+    -- ローカル開発プラグイン (自作テーマ等) のパス
+    path = vim.fn.stdpath("config") .. "/lua",
+  },
 })
