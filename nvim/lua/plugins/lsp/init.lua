@@ -2,6 +2,10 @@
 -- LSP プラグイン定義 (Mason + null-ls)
 -- 共通設定: common.lua / 言語別設定: 各言語ファイル
 --------------------------------------------------------------------------------
+
+-- lspconfig の deprecation 警告を抑制 (v3.0.0 まで様子見)
+vim.g.lspconfig_warned = true
+
 return {
   -- Mason
   { "williamboman/mason.nvim", lazy = true },
@@ -26,7 +30,7 @@ return {
           "intelephense", "php-cs-fixer",           -- PHP
           "rust-analyzer",                          -- Rust
           "typescript-language-server", "eslint-lsp", "prettier",  -- TS/JS
-          "gopls", "gofumpt", "goimports",          -- Go
+          -- "gopls", "gofumpt", "goimports",       -- Go (Go 環境がある場合のみ有効化)
           "tailwindcss-language-server",            -- Tailwind
           "lua-language-server",                    -- Lua
         },
@@ -37,7 +41,8 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "intelephense", "rust_analyzer", "ts_ls", "eslint",
-          "gopls", "tailwindcss", "lua_ls",
+          -- "gopls",                               -- Go 環境がある場合のみ有効化
+          "tailwindcss", "lua_ls",
         },
       })
 
@@ -67,8 +72,9 @@ return {
               "json", "yaml", "markdown", "html", "css", "scss",
             },
           }),
-          null_ls.builtins.formatting.gofumpt,
-          null_ls.builtins.formatting.goimports,
+          -- Go (Go 環境がある場合のみ有効化)
+          -- null_ls.builtins.formatting.gofumpt,
+          -- null_ls.builtins.formatting.goimports,
         },
       })
     end,
