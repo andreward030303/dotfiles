@@ -30,7 +30,7 @@ M.colors = {
   red_deep     = "#400808",      -- very dark red (for backgrounds)
   red_blood    = "#c00a0a",      -- blood red
 
-  -- Orange spectrum 🟠 (型・クラス用)
+  -- Orange spectrum 🟠
   orange_glow  = "#ff6600",      -- brightest neon orange
   orange_neon  = "#ff5a2a",      -- bright orange neon
   orange       = "#e85a30",      -- standard orange
@@ -38,6 +38,11 @@ M.colors = {
   amber        = "#ffaa00",      -- amber/gold (型・クラス用)
   amber_light  = "#ffc040",      -- lighter amber
   amber_dark   = "#cc8800",      -- darker amber
+
+  -- Red-Orange spectrum 🔶 (変数用)
+  coral        = "#ff6b50",      -- コーラル（変数メイン）
+  coral_light  = "#ff8a70",      -- ライトコーラル（パラメータ）
+  salmon       = "#fa8072",      -- サーモン
 
   -- Pink/Magenta spectrum 🩷
   pink_neon    = "#ff2a6a",      -- hot pink neon
@@ -51,10 +56,10 @@ M.colors = {
   green_soft   = "#7dcea0",      -- ソフトグリーン（文字列メイン）
   teal         = "#2dd4bf",      -- ティール
 
-  -- Cyan/Blue spectrum 🔵 (変数用)
+  -- Cyan/Blue spectrum 🔵
   cyan_neon    = "#00e8ff",      -- brightest cyan glow
-  cyan         = "#56d4e8",      -- standard cyan (変数メイン)
-  cyan_soft    = "#88e0f0",      -- soft cyan (パラメータ)
+  cyan         = "#56d4e8",      -- standard cyan
+  cyan_soft    = "#88e0f0",      -- soft cyan
   cyan_dark    = "#2090a0",      -- darker cyan
   blue_neon    = "#0088ff",      -- electric blue
   blue         = "#3070c0",      -- muted blue
@@ -131,7 +136,7 @@ M.setup = function()
   h(0, "Float",         { fg = c.orange_neon })
   h(0, "Boolean",       { fg = c.red_bright, bold = true })
 
-  h(0, "Identifier",    { fg = c.cyan })            -- 変数はシアン（コントラスト良い）
+  h(0, "Identifier",    { fg = c.coral })           -- 変数は赤オレンジ（コーラル）
   h(0, "Function",      { fg = c.red_neon })        -- 関数は赤ネオン（ARES感）
 
   h(0, "Statement",     { fg = c.red_neon })
@@ -267,14 +272,14 @@ M.setup = function()
   ----------------------------------------------------------------------------
   -- Treesitter
   ----------------------------------------------------------------------------
-  -- Identifiers (変数系はシアン - 読みやすさ重視)
-  h(0, "@variable",                   { fg = c.cyan })          -- 変数はシアン
-  h(0, "@variable.builtin",           { fg = c.cyan_neon })     -- self, this はネオンシアン
-  h(0, "@variable.parameter",         { fg = c.cyan_soft })     -- パラメータはソフトシアン
-  h(0, "@variable.parameter.builtin", { fg = c.cyan_soft })
-  h(0, "@variable.member",            { fg = c.teal })          -- メンバーはティール
+  -- Identifiers (変数系は赤オレンジ - ARES感)
+  h(0, "@variable",                   { fg = c.coral })         -- 変数はコーラル（赤オレンジ）
+  h(0, "@variable.builtin",           { fg = c.orange_neon })   -- self, this はオレンジネオン
+  h(0, "@variable.parameter",         { fg = c.coral_light })   -- パラメータはライトコーラル
+  h(0, "@variable.parameter.builtin", { fg = c.coral_light })
+  h(0, "@variable.member",            { fg = c.salmon })        -- メンバーはサーモン
 
-  h(0, "@constant",                   { fg = c.orange_neon })   -- 定数はオレンジネオン
+  h(0, "@constant",                   { fg = c.orange_glow })   -- 定数はオレンジグロウ
   h(0, "@constant.builtin",           { fg = c.orange_glow, bold = true })
   h(0, "@constant.macro",             { fg = c.orange })
 
@@ -305,7 +310,7 @@ M.setup = function()
 
   h(0, "@attribute",                  { fg = c.magenta })       -- アトリビュートをマゼンタ
   h(0, "@attribute.builtin",          { fg = c.pink_neon })
-  h(0, "@property",                   { fg = c.teal })          -- プロパティはティール
+  h(0, "@property",                   { fg = c.salmon })        -- プロパティはサーモン（赤オレンジ系）
 
   -- Functions (赤ネオン - ARES感)
   h(0, "@function",                   { fg = c.red_neon })
@@ -400,20 +405,20 @@ M.setup = function()
   h(0, "@lsp.type.namespace",         { fg = c.pink })          -- namespaceはピンク
   h(0, "@lsp.type.number",            { fg = c.orange_neon })
   h(0, "@lsp.type.operator",          { fg = c.fg })            -- 演算子は控えめ
-  h(0, "@lsp.type.parameter",         { fg = c.cyan_soft })     -- パラメータはソフトシアン
-  h(0, "@lsp.type.property",          { fg = c.teal })          -- プロパティはティール
+  h(0, "@lsp.type.parameter",         { fg = c.coral_light })   -- パラメータはライトコーラル
+  h(0, "@lsp.type.property",          { fg = c.salmon })        -- プロパティはサーモン
   h(0, "@lsp.type.string",            { fg = c.green_soft })    -- 文字列はソフトグリーン
   h(0, "@lsp.type.struct",            { fg = c.amber })         -- structはアンバー
   h(0, "@lsp.type.type",              { fg = c.amber })         -- 型はアンバー
   h(0, "@lsp.type.typeParameter",     { fg = c.amber_light })
-  h(0, "@lsp.type.variable",          { fg = c.cyan })          -- 変数はシアン
+  h(0, "@lsp.type.variable",          { fg = c.coral })         -- 変数はコーラル（赤オレンジ）
 
   h(0, "@lsp.mod.deprecated",         { strikethrough = true })
-  h(0, "@lsp.mod.readonly",           { fg = c.cyan_soft, italic = true })
-  h(0, "@lsp.mod.defaultLibrary",     { fg = c.cyan_dark })
+  h(0, "@lsp.mod.readonly",           { fg = c.coral_light, italic = true })
+  h(0, "@lsp.mod.defaultLibrary",     { fg = c.orange })
 
   h(0, "@lsp.typemod.function.defaultLibrary", { fg = c.red_glow })
-  h(0, "@lsp.typemod.variable.defaultLibrary", { fg = c.cyan_soft })
+  h(0, "@lsp.typemod.variable.defaultLibrary", { fg = c.coral_light })
 
   ----------------------------------------------------------------------------
   -- LSP References
@@ -461,16 +466,16 @@ M.setup = function()
   h(0, "CmpItemKindText",             { fg = c.fg })
   h(0, "CmpItemKindMethod",           { fg = c.red_neon })
   h(0, "CmpItemKindFunction",         { fg = c.red_neon })
-  h(0, "CmpItemKindConstructor",      { fg = c.amber_light })   -- コンストラクタはアンバー
-  h(0, "CmpItemKindField",            { fg = c.teal })          -- フィールドはティール
-  h(0, "CmpItemKindVariable",         { fg = c.cyan })          -- 変数はシアン
-  h(0, "CmpItemKindClass",            { fg = c.amber })         -- クラスはアンバー
+  h(0, "CmpItemKindConstructor",      { fg = c.amber_light })
+  h(0, "CmpItemKindField",            { fg = c.salmon })        -- フィールドはサーモン
+  h(0, "CmpItemKindVariable",         { fg = c.coral })         -- 変数はコーラル（赤オレンジ）
+  h(0, "CmpItemKindClass",            { fg = c.amber })
   h(0, "CmpItemKindInterface",        { fg = c.amber_light })
   h(0, "CmpItemKindModule",           { fg = c.pink })
-  h(0, "CmpItemKindProperty",         { fg = c.teal })          -- プロパティはティール
+  h(0, "CmpItemKindProperty",         { fg = c.salmon })        -- プロパティはサーモン
   h(0, "CmpItemKindUnit",             { fg = c.orange_neon })
   h(0, "CmpItemKindValue",            { fg = c.orange })
-  h(0, "CmpItemKindEnum",             { fg = c.amber })         -- enumはアンバー
+  h(0, "CmpItemKindEnum",             { fg = c.amber })
   h(0, "CmpItemKindKeyword",          { fg = c.red_glow })
   h(0, "CmpItemKindSnippet",          { fg = c.magenta })
   h(0, "CmpItemKindColor",            { fg = c.pink })
