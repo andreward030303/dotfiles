@@ -1,5 +1,7 @@
 --------------------------------------------------------------------------------
 -- 補完 (nvim-cmp + LuaSnip)
+-- Tab = Copilot用（cmpでは使わない）
+-- Enter → Space = cmp補完確定
 --------------------------------------------------------------------------------
 return {
   -- nvim-cmp 本体
@@ -39,15 +41,17 @@ return {
           end,
         },
         mapping = cmp.mapping.preset.insert({
+          -- Space: Enterを押した後なら確定
           [" "] = cmp.mapping(function(fallback)
             if cmp.visible() and has_pressed_enter then
-              -- 自動インポートを適用するために behavior を指定
               cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
+              has_pressed_enter = false
             else
               fallback()
             end
           end, { "i", "s" }),
 
+          -- Enter: 補完メニューが開いていたら次の候補を選択
           ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               has_pressed_enter = true
@@ -59,17 +63,7 @@ return {
             end
           end, { "i", "s" }),
 
-          -- Tab で確定（自動インポート付き）
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-
+          -- Tab は Copilot 用なのでここではマッピングしない（fallback）
           -- Shift+Tab でスニペット内を戻る
           ["<S-Tab>"] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then
@@ -79,6 +73,10 @@ return {
             end
           end, { "i", "s" }),
 
+          -- Ctrl+n / Ctrl+p で候補選択
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
+
           -- Ctrl+Space で補完を手動で開く
           ["<C-Space>"] = cmp.mapping.complete(),
 
@@ -86,23 +84,22 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp", priority = 1000 },  -- LSP を最優先（自動インポート付き）
-          { name = "luasnip", priority = 500 },   -- スニペットは後
+          { name = "nvim_lsp", priority = 1000 },  -- LSP を最優先
+          { name = "luasnip", priority = 500 },
           { name = "buffer", priority = 250 },
           { name = "path", priority = 100 },
         }),
-        -- ソート設定 - LSPの補完を優先
+        -- ソート設定
         sorting = {
           priority_weight = 2,
           comparators = {
             cmp.config.compare.offset,
             cmp.config.compare.exact,
             cmp.config.compare.score,
-            -- LSPのkindを優先（Function, Variable等）
+            -- Snippet(15)より他を優先
             function(entry1, entry2)
               local kind1 = entry1:get_kind()
               local kind2 = entry2:get_kind()
-              -- Snippet(15)よりFunction(3), Variable(6)等を優先
               if kind1 ~= kind2 then
                 if kind1 == 15 then return false end
                 if kind2 == 15 then return true end
@@ -121,9 +118,9 @@ return {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
-        -- 実験的機能: ghost text
+        -- ghost_text は Copilot と競合するので無効
         experimental = {
-          ghost_text = true,
+          ghost_text = false,
         },
       })
     end,
