@@ -50,11 +50,15 @@ M.colors = {
   magenta      = "#e03070",      -- マゼンタ (赤寄り)
   magenta_dark = "#a02050",      -- dark magenta
 
-  -- Green spectrum 🟢 (文字列用)
+  -- Green spectrum 🟢
   green_neon   = "#39ff14",      -- ネオングリーン
   green        = "#50fa7b",      -- エメラルド
-  green_soft   = "#7dcea0",      -- ソフトグリーン（文字列メイン）
+  green_soft   = "#7dcea0",      -- ソフトグリーン
   teal         = "#2dd4bf",      -- ティール
+
+  -- Gray spectrum for strings 🔘 (文字列用)
+  string_gray  = "#a8a0a0",      -- 暖かみのあるグレー（文字列メイン）
+  string_light = "#c0b8b8",      -- ライトグレー
 
   -- Cyan/Blue spectrum 🔵
   cyan_neon    = "#00e8ff",      -- brightest cyan glow
@@ -130,8 +134,8 @@ M.setup = function()
   -- Syntax Highlighting
   ----------------------------------------------------------------------------
   h(0, "Comment",       { fg = c.comment, italic = true })
-  h(0, "String",        { fg = c.green_soft })      -- ソフトグリーン（読みやすい）
-  h(0, "Character",     { fg = c.green })           -- エメラルド
+  h(0, "String",        { fg = c.string_gray })     -- グレー系（読みやすい）
+  h(0, "Character",     { fg = c.string_light })    -- ライトグレー
   h(0, "Number",        { fg = c.orange_neon })
   h(0, "Float",         { fg = c.orange_neon })
   h(0, "Boolean",       { fg = c.red_bright, bold = true })
@@ -153,10 +157,10 @@ M.setup = function()
   h(0, "Macro",         { fg = c.magenta })
   h(0, "PreCondit",     { fg = c.orange })
 
-  h(0, "Type",          { fg = c.amber })           -- 型はアンバー（見やすい）
-  h(0, "StorageClass",  { fg = c.amber, bold = true })
-  h(0, "Structure",     { fg = c.amber_light })
-  h(0, "Typedef",       { fg = c.amber })
+  h(0, "Type",          { fg = c.orange_neon })     -- 型・クラスはネオンオレンジ
+  h(0, "StorageClass",  { fg = c.orange_glow, bold = true })
+  h(0, "Structure",     { fg = c.orange_neon })
+  h(0, "Typedef",       { fg = c.orange_neon })
 
   h(0, "Special",       { fg = c.orange_neon })
   h(0, "SpecialChar",   { fg = c.orange_glow })
@@ -288,25 +292,25 @@ M.setup = function()
   h(0, "@label",                      { fg = c.pink })
 
   -- Literals (文字列系はグリーン)
-  h(0, "@string",                     { fg = c.green_soft })    -- 文字列はソフトグリーン
-  h(0, "@string.documentation",       { fg = c.green })
+  h(0, "@string",                     { fg = c.string_gray })   -- 文字列はグレー系
+  h(0, "@string.documentation",       { fg = c.string_light })
   h(0, "@string.regex",               { fg = c.pink_neon })     -- 正規表現をネオンピンク
   h(0, "@string.escape",              { fg = c.orange_neon })   -- エスケープ文字
-  h(0, "@string.special",             { fg = c.teal })
+  h(0, "@string.special",             { fg = c.string_light })
   h(0, "@string.special.symbol",      { fg = c.pink_neon })
   h(0, "@string.special.url",         { fg = c.cyan, underline = true })
 
-  h(0, "@character",                  { fg = c.green })
+  h(0, "@character",                  { fg = c.string_gray })
   h(0, "@character.special",          { fg = c.orange_neon })
 
   h(0, "@boolean",                    { fg = c.red_glow, bold = true })  -- boolは赤
   h(0, "@number",                     { fg = c.orange_neon })
   h(0, "@number.float",               { fg = c.orange_neon })
 
-  -- Types (型はアンバー/ゴールド系)
-  h(0, "@type",                       { fg = c.amber })         -- 型はアンバー
-  h(0, "@type.builtin",               { fg = c.amber, italic = true })
-  h(0, "@type.definition",            { fg = c.amber_light })
+  -- Types (型・クラスはネオンオレンジ)
+  h(0, "@type",                       { fg = c.orange_neon })   -- 型はネオンオレンジ
+  h(0, "@type.builtin",               { fg = c.orange_glow, italic = true })
+  h(0, "@type.definition",            { fg = c.orange_neon })
 
   h(0, "@attribute",                  { fg = c.magenta })       -- アトリビュートをマゼンタ
   h(0, "@attribute.builtin",          { fg = c.pink_neon })
@@ -392,13 +396,13 @@ M.setup = function()
   ----------------------------------------------------------------------------
   -- LSP Semantic Tokens
   ----------------------------------------------------------------------------
-  h(0, "@lsp.type.class",             { fg = c.amber })         -- クラスはアンバー
+  h(0, "@lsp.type.class",             { fg = c.orange_neon })   -- クラスはネオンオレンジ
   h(0, "@lsp.type.comment",           { fg = c.comment, italic = true })
   h(0, "@lsp.type.decorator",         { fg = c.magenta })
-  h(0, "@lsp.type.enum",              { fg = c.amber })         -- enumもアンバー
-  h(0, "@lsp.type.enumMember",        { fg = c.orange_neon })   -- enum値はオレンジ
+  h(0, "@lsp.type.enum",              { fg = c.orange_neon })   -- enumもネオンオレンジ
+  h(0, "@lsp.type.enumMember",        { fg = c.orange_glow })   -- enum値はオレンジグロウ
   h(0, "@lsp.type.function",          { fg = c.red_neon })
-  h(0, "@lsp.type.interface",         { fg = c.amber_light })   -- interfaceはライトアンバー
+  h(0, "@lsp.type.interface",         { fg = c.orange_neon })   -- interfaceもネオンオレンジ
   h(0, "@lsp.type.keyword",           { fg = c.red_glow, bold = true })
   h(0, "@lsp.type.macro",             { fg = c.magenta })
   h(0, "@lsp.type.method",            { fg = c.red_neon })
@@ -407,10 +411,10 @@ M.setup = function()
   h(0, "@lsp.type.operator",          { fg = c.fg })            -- 演算子は控えめ
   h(0, "@lsp.type.parameter",         { fg = c.coral_light })   -- パラメータはライトコーラル
   h(0, "@lsp.type.property",          { fg = c.salmon })        -- プロパティはサーモン
-  h(0, "@lsp.type.string",            { fg = c.green_soft })    -- 文字列はソフトグリーン
-  h(0, "@lsp.type.struct",            { fg = c.amber })         -- structはアンバー
-  h(0, "@lsp.type.type",              { fg = c.amber })         -- 型はアンバー
-  h(0, "@lsp.type.typeParameter",     { fg = c.amber_light })
+  h(0, "@lsp.type.string",            { fg = c.string_gray })   -- 文字列はグレー系
+  h(0, "@lsp.type.struct",            { fg = c.orange_neon })   -- structはネオンオレンジ
+  h(0, "@lsp.type.type",              { fg = c.orange_neon })   -- 型はネオンオレンジ
+  h(0, "@lsp.type.typeParameter",     { fg = c.orange_glow })
   h(0, "@lsp.type.variable",          { fg = c.coral })         -- 変数はコーラル（赤オレンジ）
 
   h(0, "@lsp.mod.deprecated",         { strikethrough = true })
@@ -466,28 +470,28 @@ M.setup = function()
   h(0, "CmpItemKindText",             { fg = c.fg })
   h(0, "CmpItemKindMethod",           { fg = c.red_neon })
   h(0, "CmpItemKindFunction",         { fg = c.red_neon })
-  h(0, "CmpItemKindConstructor",      { fg = c.amber_light })
+  h(0, "CmpItemKindConstructor",      { fg = c.orange_glow })   -- コンストラクタはオレンジ
   h(0, "CmpItemKindField",            { fg = c.salmon })        -- フィールドはサーモン
   h(0, "CmpItemKindVariable",         { fg = c.coral })         -- 変数はコーラル（赤オレンジ）
-  h(0, "CmpItemKindClass",            { fg = c.amber })
-  h(0, "CmpItemKindInterface",        { fg = c.amber_light })
+  h(0, "CmpItemKindClass",            { fg = c.orange_neon })   -- クラスはネオンオレンジ
+  h(0, "CmpItemKindInterface",        { fg = c.orange_neon })   -- インターフェースもネオンオレンジ
   h(0, "CmpItemKindModule",           { fg = c.pink })
   h(0, "CmpItemKindProperty",         { fg = c.salmon })        -- プロパティはサーモン
   h(0, "CmpItemKindUnit",             { fg = c.orange_neon })
   h(0, "CmpItemKindValue",            { fg = c.orange })
-  h(0, "CmpItemKindEnum",             { fg = c.amber })
+  h(0, "CmpItemKindEnum",             { fg = c.orange_neon })   -- enumもネオンオレンジ
   h(0, "CmpItemKindKeyword",          { fg = c.red_glow })
   h(0, "CmpItemKindSnippet",          { fg = c.magenta })
   h(0, "CmpItemKindColor",            { fg = c.pink })
   h(0, "CmpItemKindFile",             { fg = c.fg })
   h(0, "CmpItemKindReference",        { fg = c.pink })
   h(0, "CmpItemKindFolder",           { fg = c.cyan })          -- フォルダはシアン
-  h(0, "CmpItemKindEnumMember",       { fg = c.orange_neon })
+  h(0, "CmpItemKindEnumMember",       { fg = c.orange_glow })
   h(0, "CmpItemKindConstant",         { fg = c.orange_glow })   -- 定数はオレンジ
-  h(0, "CmpItemKindStruct",           { fg = c.amber })
+  h(0, "CmpItemKindStruct",           { fg = c.orange_neon })   -- structもネオンオレンジ
   h(0, "CmpItemKindEvent",            { fg = c.magenta })
   h(0, "CmpItemKindOperator",         { fg = c.fg })
-  h(0, "CmpItemKindTypeParameter",    { fg = c.amber_light })
+  h(0, "CmpItemKindTypeParameter",    { fg = c.orange_neon })
   h(0, "CmpItemKindCopilot",          { fg = c.cyan_neon })
 
   -- Gitsigns
