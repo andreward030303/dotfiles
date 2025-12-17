@@ -50,10 +50,9 @@ M.colors = {
   magenta      = "#e03070",      -- マゼンタ (赤寄り)
   magenta_dark = "#a02050",      -- dark magenta
 
-  -- Purple spectrum 🟣 (文字列用)
-  purple_neon  = "#8b07f7",      -- 文字列メイン
-  purple       = "#a020f0",      -- パープル
-  purple_light = "#b040ff",      -- ライトパープル
+  -- Cyan spectrum � (文字列用)
+  string_cyan  = "#07bbf7",      -- 文字列メイン
+  cyan_light   = "#40d0ff",      -- ライトシアン
 
   -- Green spectrum 🟢
   green_neon   = "#39ff14",      -- ネオングリーン
@@ -136,8 +135,8 @@ M.setup = function()
   -- Syntax Highlighting
   ----------------------------------------------------------------------------
   h(0, "Comment",       { fg = c.comment, italic = true })
-  h(0, "String",        { fg = c.purple_neon })     -- パープルネオン (#8b07f7)
-  h(0, "Character",     { fg = c.purple_light })    -- ライトパープル
+  h(0, "String",        { fg = c.string_cyan })     -- シアン (#07bbf7)
+  h(0, "Character",     { fg = c.cyan_light })      -- ライトシアン
   h(0, "Number",        { fg = c.orange_neon })
   h(0, "Float",         { fg = c.orange_neon })
   h(0, "Boolean",       { fg = c.red_bright, bold = true })
@@ -293,16 +292,16 @@ M.setup = function()
   h(0, "@module.builtin",             { fg = c.pink })
   h(0, "@label",                      { fg = c.pink })
 
-  -- Literals (文字列系はパープル)
-  h(0, "@string",                     { fg = c.purple_neon })   -- 文字列はパープルネオン (#8b07f7)
-  h(0, "@string.documentation",       { fg = c.purple_light })
+  -- Literals (文字列系はシアン)
+  h(0, "@string",                     { fg = c.string_cyan })   -- 文字列はシアン (#07bbf7)
+  h(0, "@string.documentation",       { fg = c.cyan_light })
   h(0, "@string.regex",               { fg = c.pink_neon })     -- 正規表現をネオンピンク
   h(0, "@string.escape",              { fg = c.orange_neon })   -- エスケープ文字
-  h(0, "@string.special",             { fg = c.purple_light })
+  h(0, "@string.special",             { fg = c.cyan_light })
   h(0, "@string.special.symbol",      { fg = c.pink_neon })
   h(0, "@string.special.url",         { fg = c.cyan, underline = true })
 
-  h(0, "@character",                  { fg = c.purple_neon })
+  h(0, "@character",                  { fg = c.string_cyan })
   h(0, "@character.special",          { fg = c.orange_neon })
 
   h(0, "@boolean",                    { fg = c.red_glow, bold = true })  -- boolは赤
@@ -413,7 +412,7 @@ M.setup = function()
   h(0, "@lsp.type.operator",          { fg = c.fg })            -- 演算子は控えめ
   h(0, "@lsp.type.parameter",         { fg = c.coral_light })   -- パラメータ
   h(0, "@lsp.type.property",          { fg = c.salmon })        -- プロパティ
-  h(0, "@lsp.type.string",            { fg = c.purple_neon })   -- 文字列はパープルネオン
+  h(0, "@lsp.type.string",            { fg = c.string_cyan })   -- 文字列はシアン (#07bbf7)
   h(0, "@lsp.type.struct",            { fg = c.orange_neon })   -- structはネオンオレンジ
   h(0, "@lsp.type.type",              { fg = c.orange_neon })   -- 型はネオンオレンジ
   h(0, "@lsp.type.typeParameter",     { fg = c.orange_glow })
