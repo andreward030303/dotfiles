@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- カスタム filetype
 vim.filetype.add({
   pattern = {
-    [".*%.blade%.php"] = "html",  -- Laravel Blade テンプレート
+    [".*%.blade%.php"] = "blade",  -- Laravel Blade テンプレート
   },
 })
 

@@ -9,11 +9,12 @@ return {
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
-          "php", "lua", "rust", "go",
+          "php", "php_only", "blade", "lua", "rust", "go",
           "typescript", "javascript", "json", "yaml",
           "html", "css", "tsx", "dart", "toml",
           "markdown", "markdown_inline", "dockerfile", "gitignore",
         },
+        auto_install = true,  -- 開いたファイルのパーサーを自動インストール
         highlight = { enable = true },
         indent = { enable = true },
         incremental_selection = {
