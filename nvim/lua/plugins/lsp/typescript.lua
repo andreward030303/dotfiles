@@ -11,6 +11,24 @@ common.setup("ts_ls", {
     "typescript", "typescriptreact", "typescript.tsx",
   },
   root_markers = { "tsconfig.json", "package.json", ".git" },
+  init_options = {
+    preferences = {
+      -- 未インポートシンボルの補完を有効化
+      includeCompletionsForModuleExports = true,
+      includeCompletionsForImportStatements = true,
+      includeCompletionsWithSnippetText = true,
+      includeCompletionsWithInsertText = true,
+      includeAutomaticOptionalChainCompletions = true,
+      includeCompletionsWithClassMemberSnippets = true,
+      includeCompletionsWithObjectLiteralMethodSnippets = true,
+      -- 自動インポート設定
+      importModuleSpecifierPreference = "shortest",
+      importModuleSpecifierEnding = "auto",
+      allowIncompleteCompletions = true,
+      -- パッケージからの自動インポート
+      includePackageJsonAutoImports = "auto",
+    },
+  },
   settings = {
     typescript = {
       inlayHints = {
@@ -23,12 +41,9 @@ common.setup("ts_ls", {
         includeInlayEnumMemberValueHints = true,
       },
       suggest = {
-        includeCompletionsForModuleExports = true,  -- 外部モジュールの補完を含める
-        autoImports = true,                          -- 自動インポートを有効化
-      },
-      preferences = {
-        importModuleSpecifier = "shortest",          -- 最短パスでインポート
-        includePackageJsonAutoImports = "auto",      -- package.json からの自動インポート
+        includeCompletionsForModuleExports = true,
+        autoImports = true,
+        completeFunctionCalls = true,
       },
     },
     javascript = {
@@ -44,18 +59,11 @@ common.setup("ts_ls", {
       suggest = {
         includeCompletionsForModuleExports = true,
         autoImports = true,
+        completeFunctionCalls = true,
       },
-      preferences = {
-        importModuleSpecifier = "shortest",
-        includePackageJsonAutoImports = "auto",
-      },
-    },
-    completions = {
-      completeFunctionCalls = true,                  -- 関数呼び出しを補完
     },
   },
   on_attach = function(client, bufnr)
-    -- 補完確定時に自動インポートを実行するための設定
     common.on_attach(client, bufnr)
   end,
 })
