@@ -53,3 +53,30 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<CR>", "<CR>", bufopts)
   end,
 })
+
+--------------------------------------------------------------------------------
+-- React / TypeScript 用
+--------------------------------------------------------------------------------
+-- React hooks を素早くインポート（ファイル先頭に追加）
+map("n", "<leader>ir", function()
+  local line = "import { useState, useEffect, useMemo, useCallback } from 'react';"
+  -- ファイル先頭に追加（既存のimportがあればその下に）
+  local lines = vim.api.nvim_buf_get_lines(0, 0, 10, false)
+  local insert_line = 0
+  for i, l in ipairs(lines) do
+    if l:match("^import") or l:match("^'use") then
+      insert_line = i
+    end
+  end
+  vim.api.nvim_buf_set_lines(0, insert_line, insert_line, false, { line })
+  print("Added React hooks import")
+end, { desc = "Import React hooks" })
+
+-- 'use client' を追加
+map("n", "<leader>uc", function()
+  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1] or ""
+  if not first_line:match("^'use client'") then
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, { "'use client';", "" })
+    print("Added 'use client'")
+  end
+end, { desc = "Add 'use client'" })
