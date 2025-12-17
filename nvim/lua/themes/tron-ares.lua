@@ -40,9 +40,9 @@ M.colors = {
   amber_dark   = "#cc8800",      -- darker amber
 
   -- Red-Orange spectrum 🔶 (変数用)
-  coral        = "#ff6b50",      -- コーラル（変数メイン）
-  coral_light  = "#ff8a70",      -- ライトコーラル（パラメータ）
-  salmon       = "#fa8072",      -- サーモン
+  coral        = "#f75707",      -- 変数メイン
+  coral_light  = "#ff7a30",      -- ライト（パラメータ）
+  salmon       = "#ff6020",      -- サーモン
 
   -- Pink/Magenta spectrum 🩷
   pink_neon    = "#ff2a6a",      -- hot pink neon
@@ -50,14 +50,16 @@ M.colors = {
   magenta      = "#e03070",      -- マゼンタ (赤寄り)
   magenta_dark = "#a02050",      -- dark magenta
 
+  -- Purple spectrum 🟣 (文字列用)
+  purple_neon  = "#8b07f7",      -- 文字列メイン
+  purple       = "#a020f0",      -- パープル
+  purple_light = "#b040ff",      -- ライトパープル
+
   -- Green spectrum 🟢
   green_neon   = "#39ff14",      -- ネオングリーン
   green        = "#50fa7b",      -- エメラルド
   green_soft   = "#7dcea0",      -- ソフトグリーン
   teal         = "#2dd4bf",      -- ティール
-
-  -- Gray spectrum for strings 🔘 (文字列用)
-  string_gray  = "#a8a0a0",      -- 暖かみのあるグレー（文字列メイン）
   string_light = "#c0b8b8",      -- ライトグレー
 
   -- Cyan/Blue spectrum 🔵
@@ -134,13 +136,13 @@ M.setup = function()
   -- Syntax Highlighting
   ----------------------------------------------------------------------------
   h(0, "Comment",       { fg = c.comment, italic = true })
-  h(0, "String",        { fg = c.string_gray })     -- グレー系（読みやすい）
-  h(0, "Character",     { fg = c.string_light })    -- ライトグレー
+  h(0, "String",        { fg = c.purple_neon })     -- パープルネオン (#8b07f7)
+  h(0, "Character",     { fg = c.purple_light })    -- ライトパープル
   h(0, "Number",        { fg = c.orange_neon })
   h(0, "Float",         { fg = c.orange_neon })
   h(0, "Boolean",       { fg = c.red_bright, bold = true })
 
-  h(0, "Identifier",    { fg = c.coral })           -- 変数は赤オレンジ（コーラル）
+  h(0, "Identifier",    { fg = c.coral })           -- 変数 (#f75707)
   h(0, "Function",      { fg = c.red_neon })        -- 関数は赤ネオン（ARES感）
 
   h(0, "Statement",     { fg = c.red_neon })
@@ -291,16 +293,16 @@ M.setup = function()
   h(0, "@module.builtin",             { fg = c.pink })
   h(0, "@label",                      { fg = c.pink })
 
-  -- Literals (文字列系はグリーン)
-  h(0, "@string",                     { fg = c.string_gray })   -- 文字列はグレー系
-  h(0, "@string.documentation",       { fg = c.string_light })
+  -- Literals (文字列系はパープル)
+  h(0, "@string",                     { fg = c.purple_neon })   -- 文字列はパープルネオン (#8b07f7)
+  h(0, "@string.documentation",       { fg = c.purple_light })
   h(0, "@string.regex",               { fg = c.pink_neon })     -- 正規表現をネオンピンク
   h(0, "@string.escape",              { fg = c.orange_neon })   -- エスケープ文字
-  h(0, "@string.special",             { fg = c.string_light })
+  h(0, "@string.special",             { fg = c.purple_light })
   h(0, "@string.special.symbol",      { fg = c.pink_neon })
   h(0, "@string.special.url",         { fg = c.cyan, underline = true })
 
-  h(0, "@character",                  { fg = c.string_gray })
+  h(0, "@character",                  { fg = c.purple_neon })
   h(0, "@character.special",          { fg = c.orange_neon })
 
   h(0, "@boolean",                    { fg = c.red_glow, bold = true })  -- boolは赤
@@ -409,13 +411,13 @@ M.setup = function()
   h(0, "@lsp.type.namespace",         { fg = c.pink })          -- namespaceはピンク
   h(0, "@lsp.type.number",            { fg = c.orange_neon })
   h(0, "@lsp.type.operator",          { fg = c.fg })            -- 演算子は控えめ
-  h(0, "@lsp.type.parameter",         { fg = c.coral_light })   -- パラメータはライトコーラル
-  h(0, "@lsp.type.property",          { fg = c.salmon })        -- プロパティはサーモン
-  h(0, "@lsp.type.string",            { fg = c.string_gray })   -- 文字列はグレー系
+  h(0, "@lsp.type.parameter",         { fg = c.coral_light })   -- パラメータ
+  h(0, "@lsp.type.property",          { fg = c.salmon })        -- プロパティ
+  h(0, "@lsp.type.string",            { fg = c.purple_neon })   -- 文字列はパープルネオン
   h(0, "@lsp.type.struct",            { fg = c.orange_neon })   -- structはネオンオレンジ
   h(0, "@lsp.type.type",              { fg = c.orange_neon })   -- 型はネオンオレンジ
   h(0, "@lsp.type.typeParameter",     { fg = c.orange_glow })
-  h(0, "@lsp.type.variable",          { fg = c.coral })         -- 変数はコーラル（赤オレンジ）
+  h(0, "@lsp.type.variable",          { fg = c.coral })         -- 変数 (#f75707)
 
   h(0, "@lsp.mod.deprecated",         { strikethrough = true })
   h(0, "@lsp.mod.readonly",           { fg = c.coral_light, italic = true })
