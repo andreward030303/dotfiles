@@ -37,6 +37,12 @@ M.colors = {
   amber        = "#ffaa00",      -- amber/gold (brighter!)
   amber_dark   = "#cc8800",      -- darker amber
 
+  -- Purple spectrum (変数用🟣) 
+  purple_neon  = "#c875ff",      -- ネオンパープル (明るめ、見やすい)
+  purple       = "#b060e0",      -- スタンダードパープル
+  purple_soft  = "#d0a0ff",      -- ソフトパープル (より明るい)
+  purple_dark  = "#8040a0",      -- ダークパープル
+
   -- Pink/Magenta spectrum 🩷
   pink_neon    = "#ff2a6a",      -- hot pink neon
   pink         = "#e8457a",      -- pink
@@ -122,7 +128,7 @@ M.setup = function()
   h(0, "Float",         { fg = c.orange_neon })
   h(0, "Boolean",       { fg = c.orange_glow, bold = true })
 
-  h(0, "Identifier",    { fg = c.fg })
+  h(0, "Identifier",    { fg = c.purple_neon })     -- 識別子をネオンパープル🟣
   h(0, "Function",      { fg = c.red_neon })
 
   h(0, "Statement",     { fg = c.red_neon })
@@ -259,11 +265,11 @@ M.setup = function()
   -- Treesitter
   ----------------------------------------------------------------------------
   -- Identifiers
-  h(0, "@variable",                   { fg = c.fg })
-  h(0, "@variable.builtin",           { fg = c.orange })        -- self, this をオレンジに
+  h(0, "@variable",                   { fg = c.purple_neon })   -- 変数をネオンパープルに🟣
+  h(0, "@variable.builtin",           { fg = c.purple_soft })   -- self, this をソフトパープル
   h(0, "@variable.parameter",         { fg = c.orange_neon })   -- パラメータをネオンオレンジ
   h(0, "@variable.parameter.builtin", { fg = c.orange_neon })
-  h(0, "@variable.member",            { fg = c.fg })
+  h(0, "@variable.member",            { fg = c.purple })        -- メンバーもパープル
 
   h(0, "@constant",                   { fg = c.orange_glow })   -- 定数はネオンオレンジ
   h(0, "@constant.builtin",           { fg = c.orange_glow, bold = true })
@@ -296,7 +302,7 @@ M.setup = function()
 
   h(0, "@attribute",                  { fg = c.orange })        -- アトリビュートをオレンジ
   h(0, "@attribute.builtin",          { fg = c.orange_neon })
-  h(0, "@property",                   { fg = c.fg })
+  h(0, "@property",                   { fg = c.purple })        -- プロパティをパープル🟣
 
   -- Functions
   h(0, "@function",                   { fg = c.red_neon })
@@ -392,19 +398,19 @@ M.setup = function()
   h(0, "@lsp.type.number",            { fg = c.orange_neon })
   h(0, "@lsp.type.operator",          { fg = c.red })
   h(0, "@lsp.type.parameter",         { fg = c.orange_neon })   -- パラメータをオレンジ
-  h(0, "@lsp.type.property",          { fg = c.fg })
+  h(0, "@lsp.type.property",          { fg = c.purple })        -- プロパティをパープル
   h(0, "@lsp.type.string",            { fg = c.amber })         -- 文字列をアンバー
   h(0, "@lsp.type.struct",            { fg = c.cyan })
   h(0, "@lsp.type.type",              { fg = c.cyan })
   h(0, "@lsp.type.typeParameter",     { fg = c.cyan })
-  h(0, "@lsp.type.variable",          { fg = c.fg })
+  h(0, "@lsp.type.variable",          { fg = c.purple_neon })   -- 変数をネオンパープル🟣
 
   h(0, "@lsp.mod.deprecated",         { strikethrough = true })
-  h(0, "@lsp.mod.readonly",           { fg = c.orange, italic = true })  -- readonlyをオレンジ
-  h(0, "@lsp.mod.defaultLibrary",     { fg = c.orange })
+  h(0, "@lsp.mod.readonly",           { fg = c.purple_soft, italic = true })  -- readonlyをソフトパープル
+  h(0, "@lsp.mod.defaultLibrary",     { fg = c.purple_dark })
 
   h(0, "@lsp.typemod.function.defaultLibrary", { fg = c.red_glow })
-  h(0, "@lsp.typemod.variable.defaultLibrary", { fg = c.orange })
+  h(0, "@lsp.typemod.variable.defaultLibrary", { fg = c.purple_soft })
 
   ----------------------------------------------------------------------------
   -- LSP References
