@@ -84,28 +84,33 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
         }),
         sources = cmp.config.sources({
-          { name = "nvim_lsp", priority = 1000 },  -- LSP を最優先
-          { name = "luasnip", priority = 500 },
-          { name = "buffer", priority = 250 },
-          { name = "path", priority = 100 },
+          { name = "nvim_lsp", priority = 1000, keyword_length = 1 },  -- LSP 最優先、1文字から補完
+          { name = "buffer", priority = 300, keyword_length = 3 },
+          { name = "path", priority = 200 },
+          { name = "luasnip", priority = 100, keyword_length = 2 },   -- スニペットは最後
         }),
-        -- ソート設定
+        -- ソート設定 - LSP補完を確実に上に
         sorting = {
           priority_weight = 2,
           comparators = {
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.score,
-            -- Snippet(15)より他を優先
+            -- ソース優先度を最初に
             function(entry1, entry2)
-              local kind1 = entry1:get_kind()
-              local kind2 = entry2:get_kind()
-              if kind1 ~= kind2 then
-                if kind1 == 15 then return false end
-                if kind2 == 15 then return true end
+              local source_priority = {
+                nvim_lsp = 4,
+                buffer = 2,
+                path = 1,
+                luasnip = 0,
+              }
+              local p1 = source_priority[entry1.source.name] or 0
+              local p2 = source_priority[entry2.source.name] or 0
+              if p1 ~= p2 then
+                return p1 > p2
               end
               return nil
             end,
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.score,
             cmp.config.compare.recently_used,
             cmp.config.compare.kind,
             cmp.config.compare.sort_text,
