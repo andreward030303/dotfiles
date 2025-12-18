@@ -11,10 +11,28 @@ M.capabilities = require("cmp_nvim_lsp").default_capabilities()
 M.on_attach = function(_, bufnr)
   local opts = { buffer = bufnr, noremap = true, silent = true }
 
-  vim.keymap.set("n", "gd", function()
+  -- 定義ジャンプ用の関数（quickfixリストを表示しない）
+  local function goto_definition_in_new_tab()
     vim.cmd("tab split")
-    vim.lsp.buf.definition()
-  end, opts)
+    -- カスタムハンドラで最初の結果に直接ジャンプ
+    vim.lsp.buf.definition({
+      on_list = function(options)
+        if options.items and #options.items > 0 then
+          local item = options.items[1]
+          if item.filename then
+            vim.cmd("edit " .. vim.fn.fnameescape(item.filename))
+            vim.api.nvim_win_set_cursor(0, { item.lnum, item.col - 1 })
+          end
+        end
+      end,
+    })
+  end
+
+  -- gd: 定義ジャンプ（新しいタブ、quickfixなし）
+  vim.keymap.set("n", "gd", goto_definition_in_new_tab, opts)
+
+  -- gt: 同じ動作
+  vim.keymap.set("n", "gt", goto_definition_in_new_tab, opts)
 
   vim.keymap.set("n", "gr", function()
     require("telescope.builtin").lsp_references()
