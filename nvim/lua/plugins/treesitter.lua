@@ -31,19 +31,6 @@ return {
         },
         matchup = { enable = true },
       })
-
-      -- Bladeファイル保存時にTreesitterパーサーを再同期
-      vim.api.nvim_create_autocmd("BufWritePost", {
-        pattern = "*.blade.php",
-        callback = function()
-          vim.schedule(function()
-            if vim.bo.filetype == "blade" then
-              vim.cmd("write | edit")
-            end
-          end)
-        end,
-        desc = "Refresh Treesitter for Blade files after save",
-      })
     end,
   },
 }
