@@ -5,7 +5,8 @@ return {
   -- tokyonight: :colorscheme tokyonight で切り替え可能
   {
     "folke/tokyonight.nvim",
-    lazy = true,
+    lazy = false,
+    priority = 1000,
     config = function()
       require("tokyonight").setup({
         style = "storm",

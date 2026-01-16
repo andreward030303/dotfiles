@@ -16,5 +16,5 @@ require("config.lazy")
 
 -- 5. カラースキーム (プラグイン読み込み後)
 vim.schedule(function()
-  require("themes.tron-ares").setup()
+  vim.cmd("colorscheme tokyonight")
 end)
