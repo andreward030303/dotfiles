@@ -121,7 +121,7 @@ fi
 # Neovim 設定リンク
 # ======================
 mkdir -p ~/.config
-ln -sfn "/home/dotfiles/nvim" ~/.config/nvim
+ln -sfn "/code/dotfiles/nvim" ~/.config/nvim
 
 echo "✅ Setup complete. Run 'source ~/.bashrc' to apply changes."
 
