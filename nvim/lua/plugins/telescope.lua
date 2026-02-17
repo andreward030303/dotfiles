@@ -34,14 +34,14 @@ return {
       local find_cmd
       if vim.fn.executable("fd") == 1 then
         find_cmd = {
-          "fd", "--type", "f", "--strip-cwd-prefix", "--hidden", "--follow",
+          "fd", "--type", "f", "--strip-cwd-prefix", "--hidden",
           "--exclude", ".git", "--exclude", "node_modules", "--exclude", "vendor",
           "--exclude", "storage", "--exclude", "dist", "--exclude", "build",
           "--exclude", ".cache", "--exclude", "coverage", "--exclude", "tmp",
         }
       else
         find_cmd = {
-          "rg", "--files", "--hidden", "--follow",
+          "rg", "--files", "--hidden",
           "--glob", "!.git/*", "--glob", "!node_modules/*", "--glob", "!vendor/*",
           "--glob", "!storage/*", "--glob", "!dist/*", "--glob", "!build/*",
           "--glob", "!.cache/*", "--glob", "!coverage/*", "--glob", "!tmp/*",
@@ -53,7 +53,7 @@ return {
           buffer_previewer_maker = large_file_safe_previewer,
           vimgrep_arguments = {
             "rg", "--color=never", "--no-heading", "--with-filename",
-            "--line-number", "--column", "--smart-case", "--hidden", "--follow",
+            "--line-number", "--column", "--smart-case", "--hidden",
             "--glob", "!.git/*", "--glob", "!node_modules/*", "--glob", "!vendor/*",
             "--glob", "!storage/*", "--glob", "!dist/*", "--glob", "!build/*",
             "--glob", "!.cache/*", "--glob", "!coverage/*", "--glob", "!tmp/*",
