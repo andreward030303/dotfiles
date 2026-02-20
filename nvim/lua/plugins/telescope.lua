@@ -9,7 +9,15 @@ return {
       { "<leader>ff", desc = "Find Files" },
       { "<leader>fg", desc = "Live Grep" },
     },
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      -- ★ ネイティブ fzf ソーター (C実装) — デフォルトの Lua ソーターより桁違いに速い
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release"
+          .. " && cmake --build build --config Release",
+      },
+    },
     config = function()
       local telescope = require("telescope")
       local previewers = require("telescope.previewers")
@@ -30,7 +38,7 @@ return {
         return previewers.buffer_previewer_maker(filepath, bufnr, opts)
       end
 
-      -- fd があれば優先
+      -- fd があれば優先 (fdfind は Ubuntu の fd-find パッケージ名)
       local find_cmd
       if vim.fn.executable("fd") == 1 then
         find_cmd = {
@@ -58,10 +66,8 @@ return {
             "--glob", "!storage/*", "--glob", "!dist/*", "--glob", "!build/*",
             "--glob", "!.cache/*", "--glob", "!coverage/*", "--glob", "!tmp/*",
           },
-          file_ignore_patterns = {
-            "%.git/", "node_modules/", "vendor/", "storage/",
-            "dist/", "build/", "target/", "%.cache/", "coverage/", "tmp/",
-          },
+          -- ★ file_ignore_patterns 削除: fd/rg の --exclude で既にフィルタ済み
+          --   Lua 側で二重フィルタすると毎キー入力で全件走査になり重い
           path_display = { "truncate" },
           color_devicons = false,
           preview = { treesitter = false, timeout = 150 },
@@ -83,7 +89,18 @@ return {
         pickers = {
           find_files = { find_command = find_cmd },
         },
+        extensions = {
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          },
+        },
       })
+
+      -- ★ fzf ネイティブソーターを有効化
+      telescope.load_extension("fzf")
 
       -- キーマップ
       local builtin = require("telescope.builtin")
