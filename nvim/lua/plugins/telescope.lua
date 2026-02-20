@@ -11,11 +11,10 @@ return {
     },
     dependencies = {
       "nvim-lua/plenary.nvim",
-      -- ★ ネイティブ fzf ソーター (C実装) — デフォルトの Lua ソーターより桁違いに速い
+      -- ★ ネイティブ fzf ソーター (C実装)
       {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release"
-          .. " && cmake --build build --config Release",
+        build = "make",
       },
     },
     config = function()
@@ -38,21 +37,26 @@ return {
         return previewers.buffer_previewer_maker(filepath, bufnr, opts)
       end
 
-      -- fd があれば優先 (fdfind は Ubuntu の fd-find パッケージ名)
+      -- fd / fdfind (Ubuntu) があれば優先、なければ rg にフォールバック
+      local fd_bin = (vim.fn.executable("fd") == 1 and "fd")
+        or (vim.fn.executable("fdfind") == 1 and "fdfind")
+        or nil
+
       local find_cmd
-      if vim.fn.executable("fd") == 1 then
+      if fd_bin then
         find_cmd = {
-          "fd", "--type", "f", "--strip-cwd-prefix", "--hidden",
+          fd_bin, "--type", "f", "--strip-cwd-prefix", "--hidden",
           "--exclude", ".git", "--exclude", "node_modules", "--exclude", "vendor",
           "--exclude", "storage", "--exclude", "dist", "--exclude", "build",
           "--exclude", ".cache", "--exclude", "coverage", "--exclude", "tmp",
         }
       else
+        -- ★ glob は "!dir" でディレクトリ丸ごと除外 ("!dir/*" だと直下しか効かない)
         find_cmd = {
           "rg", "--files", "--hidden",
-          "--glob", "!.git/*", "--glob", "!node_modules/*", "--glob", "!vendor/*",
-          "--glob", "!storage/*", "--glob", "!dist/*", "--glob", "!build/*",
-          "--glob", "!.cache/*", "--glob", "!coverage/*", "--glob", "!tmp/*",
+          "--glob", "!.git", "--glob", "!node_modules", "--glob", "!vendor",
+          "--glob", "!storage", "--glob", "!dist", "--glob", "!build",
+          "--glob", "!.cache", "--glob", "!coverage", "--glob", "!tmp",
         }
       end
 
@@ -62,12 +66,10 @@ return {
           vimgrep_arguments = {
             "rg", "--color=never", "--no-heading", "--with-filename",
             "--line-number", "--column", "--smart-case", "--hidden",
-            "--glob", "!.git/*", "--glob", "!node_modules/*", "--glob", "!vendor/*",
-            "--glob", "!storage/*", "--glob", "!dist/*", "--glob", "!build/*",
-            "--glob", "!.cache/*", "--glob", "!coverage/*", "--glob", "!tmp/*",
+            "--glob", "!.git", "--glob", "!node_modules", "--glob", "!vendor",
+            "--glob", "!storage", "--glob", "!dist", "--glob", "!build",
+            "--glob", "!.cache", "--glob", "!coverage", "--glob", "!tmp",
           },
-          -- ★ file_ignore_patterns 削除: fd/rg の --exclude で既にフィルタ済み
-          --   Lua 側で二重フィルタすると毎キー入力で全件走査になり重い
           path_display = { "truncate" },
           color_devicons = false,
           preview = { treesitter = false, timeout = 150 },
@@ -99,8 +101,8 @@ return {
         },
       })
 
-      -- ★ fzf ネイティブソーターを有効化
-      telescope.load_extension("fzf")
+      -- fzf-native が正常にビルドされていれば有効化 (失敗しても動作は継続)
+      pcall(telescope.load_extension, "fzf")
 
       -- キーマップ
       local builtin = require("telescope.builtin")

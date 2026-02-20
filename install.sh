@@ -11,6 +11,11 @@ apt install -y \
   wget curl ninja-build gettext cmake unzip build-essential git ripgrep fd-find tmux\
   locales
 
+# fd-find は Ubuntu だと fdfind という名前になる → fd として使えるようにシンボリックリンク
+if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
+  ln -sf "$(which fdfind)" /usr/local/bin/fd
+fi
+
 # ======================
 # ロケール設定 (ja_JP.UTF-8)
 # ======================
