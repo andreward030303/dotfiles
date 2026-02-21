@@ -52,26 +52,17 @@ elif is_amzn2023; then
   # ---- Amazon Linux 2023: dnf で代替（必ずsudo） ----
   _sudo dnf -y makecache
 
-  # まずは基本セットを入れる（失敗しても後で補完する）
-  if ! _sudo dnf -y install \
-      wget curl ninja-build gettext cmake unzip git ripgrep tmux \
+  # AL2023のリポジトリに存在するパッケージのみインストール
+  # ripgrep, fd-find, fd は AL2023 リポジトリに存在しないため除外
+  _sudo dnf -y install \
+      wget curl ninja-build gettext cmake unzip git tmux \
       glibc-langpack-ja \
-      gcc gcc-c++ make \
-      ; then
-    echo "⚠️ dnf install (base) failed. Retrying makecache..." >&2
-    _sudo dnf -y makecache
-    _sudo dnf -y install gcc gcc-c++ make glibc-langpack-ja || true
-  fi
+      gcc gcc-c++ make
 
-  # fd を確実に入れる（環境により fd-find / fd の揺れを吸収）
-  if ! command -v fd >/dev/null 2>&1 && ! command -v fdfind >/dev/null 2>&1; then
-    _sudo dnf -y install fd-find || _sudo dnf -y install fd || true
-  fi
+  # ripgrep: AL2023リポジトリに無いため cargo で入れる（後の Rust セクション後に実行）
+  # fd: 同上
 
   # cc を確実に用意（styluaビルドに必須）
-  if ! command -v cc >/dev/null 2>&1; then
-    _sudo dnf -y install gcc gcc-c++ make
-  fi
   if ! command -v cc >/dev/null 2>&1; then
     echo "❌ linker 'cc' が見つかりません。gcc導入に失敗しました。" >&2
     echo "   手動で: sudo dnf -y install gcc gcc-c++ make" >&2
@@ -222,6 +213,28 @@ if ! command -v stylua >/dev/null 2>&1; then
   cargo install stylua --locked
   echo "✅ Stylua installed: $(which stylua)"
   stylua --version
+fi
+
+# ======================
+# ripgrep / fd (AL2023: cargo 経由)
+# ======================
+if is_amzn2023; then
+  # Rust/cargo は上のセクションで導入済み
+  if ! command -v cargo >/dev/null 2>&1; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+  fi
+
+  if ! command -v rg >/dev/null 2>&1; then
+    echo "🚀 Installing ripgrep via cargo (AL2023)..."
+    cargo install ripgrep --locked
+    echo "✅ ripgrep installed: $(rg --version | head -1)"
+  fi
+
+  if ! command -v fd >/dev/null 2>&1 && ! command -v fdfind >/dev/null 2>&1; then
+    echo "🚀 Installing fd via cargo (AL2023)..."
+    cargo install fd-find --locked
+    echo "✅ fd installed: $(fd --version)"
+  fi
 fi
 
 # ======================
