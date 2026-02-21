@@ -1,6 +1,6 @@
 #!/bin/bash
-#set -euo pipefail
-#trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
+set -euo pipefail
+trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -164,8 +164,25 @@ fi
 cd neovim
 git fetch --all
 git checkout v0.11.4
-make CMAKE_BUILD_TYPE=Release
-_sudo make install
+
+echo "🔨 Building Neovim v0.11.4..."
+if ! make CMAKE_BUILD_TYPE=Release; then
+  echo "❌ Neovim のビルドに失敗しました。ビルドログを確認してください。" >&2
+  exit 1
+fi
+
+if ! _sudo make install; then
+  echo "❌ Neovim のインストールに失敗しました。" >&2
+  exit 1
+fi
+
+if ! command -v nvim >/dev/null 2>&1; then
+  echo "❌ nvim がインストール後もPATHに見つかりません。" >&2
+  echo "   ls /usr/local/bin/nvim: $(ls -la /usr/local/bin/nvim 2>&1 || echo 'not found')" >&2
+  exit 1
+fi
+echo "✅ Neovim installed: $(nvim --version | head -1)"
+
 cd ~
 
 # ======================
