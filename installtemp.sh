@@ -221,7 +221,11 @@ fi
 # Neovim 設定リンク
 # ======================
 mkdir -p ~/.config
-ln -sfn "/home/dotfiles/nvim" ~/.config/nvim
+if is_ubuntu_like; then
+  ln -sfn "/home/dotfiles/nvim" ~/.config/nvim
+elif is_amzn2023; then
+  ln -sfn "/home/ec2-user/dotfiles/nvim" ~/.config/nvim
+fi
 
 echo "✅ Setup complete. Run 'source ~/.bashrc' to apply changes."
 
