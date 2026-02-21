@@ -128,11 +128,14 @@ if ! command -v node >/dev/null 2>&1; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
   fi
 
+  # nvm.sh 内部で未定義変数を参照するため -u を一時的に解除
+  set +u
   . "$NVM_DIR/nvm.sh"
 
   nvm install --lts
   nvm use --lts
   nvm alias default 'lts/*'
+  set -u
 
   if ! grep -q 'NVM_DIR' "$HOME/.bashrc"; then
     cat <<'EOF' >> "$HOME/.bashrc"
