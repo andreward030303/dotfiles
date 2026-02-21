@@ -53,9 +53,10 @@ elif is_amzn2023; then
   _sudo dnf -y makecache
 
   # AL2023のリポジトリに存在するパッケージのみインストール
-  # ripgrep, fd-find, fd は AL2023 リポジトリに存在しないため除外
+  # ripgrep, fd-find → AL2023 リポジトリに無い（cargo で後から入れる）
+  # curl → curl-minimal がプリインストール済みで競合するため除外
   _sudo dnf -y install \
-      wget curl ninja-build gettext cmake unzip git tmux \
+      wget ninja-build gettext cmake unzip git tmux \
       glibc-langpack-ja \
       gcc gcc-c++ make
 
