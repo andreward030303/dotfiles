@@ -1,0 +1,121 @@
+--------------------------------------------------------------------------------
+-- Telescope
+--------------------------------------------------------------------------------
+return {
+  {
+    "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
+    keys = {
+      { "<leader>ff", desc = "Find Files" },
+      { "<leader>fg", desc = "Live Grep" },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      -- ★ ネイティブ fzf ソーター (C実装)
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+      },
+    },
+    config = function()
+      local telescope = require("telescope")
+      local previewers = require("telescope.previewers")
+      local actions = require("telescope.actions")
+
+      -- 大きいファイルのプレビューを抑止
+      local function large_file_safe_previewer(filepath, bufnr, opts)
+        filepath = vim.fn.expand(filepath)
+        local ok, stat = pcall(vim.loop.fs_stat, filepath)
+        if ok and stat and stat.size and stat.size > 200 * 1024 then
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(bufnr) then
+              vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "Preview disabled (file > 200KB)" })
+            end
+          end)
+          return
+        end
+        return previewers.buffer_previewer_maker(filepath, bufnr, opts)
+      end
+
+      -- fd / fdfind (Ubuntu) があれば優先、なければ rg にフォールバック
+      local fd_bin = (vim.fn.executable("fd") == 1 and "fd")
+        or (vim.fn.executable("fdfind") == 1 and "fdfind")
+        or nil
+
+      local find_cmd
+      if fd_bin then
+        find_cmd = {
+          fd_bin, "--type", "f", "--strip-cwd-prefix", "--hidden",
+          "--exclude", ".git", "--exclude", "node_modules", "--exclude", "vendor",
+          "--exclude", "storage", "--exclude", "dist", "--exclude", "build",
+          "--exclude", ".cache", "--exclude", "coverage", "--exclude", "tmp",
+        }
+      else
+        -- ★ glob は "!dir" でディレクトリ丸ごと除外 ("!dir/*" だと直下しか効かない)
+        find_cmd = {
+          "rg", "--files", "--hidden",
+          "--glob", "!.git", "--glob", "!node_modules", "--glob", "!vendor",
+          "--glob", "!storage", "--glob", "!dist", "--glob", "!build",
+          "--glob", "!.cache", "--glob", "!coverage", "--glob", "!tmp",
+        }
+      end
+
+      telescope.setup({
+        defaults = {
+          buffer_previewer_maker = large_file_safe_previewer,
+          vimgrep_arguments = {
+            "rg", "--color=never", "--no-heading", "--with-filename",
+            "--line-number", "--column", "--smart-case", "--hidden",
+            "--glob", "!.git", "--glob", "!node_modules", "--glob", "!vendor",
+            "--glob", "!storage", "--glob", "!dist", "--glob", "!build",
+            "--glob", "!.cache", "--glob", "!coverage", "--glob", "!tmp",
+          },
+          path_display = { "truncate" },
+          color_devicons = false,
+          preview = { treesitter = false, timeout = 150 },
+          sorting_strategy = "ascending",
+          layout_config = { prompt_position = "top", horizontal = { preview_width = 0.55 } },
+          mappings = {
+            i = {
+              ["<CR>"] = actions.move_selection_next,
+              [" "] = actions.select_default,
+              ["<S-Tab>"] = actions.toggle_selection,
+            },
+            n = {
+              ["<CR>"] = actions.move_selection_next,
+              [" "] = actions.select_default,
+              ["<S-Tab>"] = actions.toggle_selection,
+            },
+          },
+        },
+        pickers = {
+          find_files = { find_command = find_cmd },
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          },
+        },
+      })
+
+      -- fzf-native が正常にビルドされていれば有効化 (失敗しても動作は継続)
+      pcall(telescope.load_extension, "fzf")
+
+      -- キーマップ
+      local builtin = require("telescope.builtin")
+      local function open_in_tab_or_current(fn)
+        return function()
+          if vim.bo.filetype ~= "netrw" then
+            vim.cmd("tab split")
+          end
+          fn()
+        end
+      end
+      vim.keymap.set("n", "<leader>ff", open_in_tab_or_current(builtin.find_files), { desc = "Find Files" })
+      vim.keymap.set("n", "<leader>fg", open_in_tab_or_current(builtin.live_grep), { desc = "Live Grep" })
+    end,
+  },
+}

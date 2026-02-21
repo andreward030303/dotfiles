@@ -1,16 +1,20 @@
+--------------------------------------------------------------------------------
+-- Neovim エントリポイント
+--------------------------------------------------------------------------------
 
-require("core.keymaps")
-require("core.options")
-require("core.diagnostics")
-require("core.filetype")
-require("plugins")
+-- 1. 基本オプション
+require("config.options")
 
-require("core.cmp")   -- 補完の設定を読み込む
+-- 2. キーマップ (プラグイン無関係)
+require("config.keymaps")
 
-require("core.telescope")
+-- 3. Autocmds (filetype, diagnostics 等)
+require("config.autocmds")
 
-require("lsp.php")
+-- 4. プラグイン (lazy.nvim)
+require("config.lazy")
 
-require("core.lspsaga")
-
-require("core.colorscheme")
+-- 5. カラースキーム (プラグイン読み込み後)
+vim.schedule(function()
+  vim.cmd("colorscheme tokyonight")
+end)
